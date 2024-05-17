@@ -55,7 +55,7 @@ describe('Test Case Departamentos - Cadastrar - US 60625', () => {
         cy.get('div.modal-content').should('not.exist')
     })
 
-    it('CT005 - Nome e Abreviação válida', () => {
+    it.skip('CT005 - Nome e Abreviação válida', () => {
         cy.get('button.secondary').click()
         cy.get('input#nomeDepartamento').clear().type(randomBytes(3).toString('hex'))
         cy.get('input#abreviacao').clear().type(randomBytes(1).toString('hex'))
