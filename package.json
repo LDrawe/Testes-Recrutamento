@@ -1,0 +1,17 @@
+{
+  "name": "testingcypress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cypress.config.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "cypress": "^13.9.0"
+  },
+  "scripts": {
+    "start": "npx cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
