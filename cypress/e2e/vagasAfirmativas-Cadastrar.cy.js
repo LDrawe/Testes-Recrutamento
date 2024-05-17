@@ -11,7 +11,7 @@ describe('Test Case Vagas Afirmativas - Cadastrar - US 60648', () => {
         cy.visit('/')
         cy.title().should('contain', 'Recrutamento')
         cy.get('li > div.wrapper').eq(2).click()
-        cy.get('.sub-menu > :nth-child(17)').click()
+        cy.get('.sub-menu > :nth-child(16)').click()
         cy.url().should('contain', 'setup-da-empresa/vagas-afirmativas')
     })
 
@@ -45,15 +45,15 @@ describe('Test Case Vagas Afirmativas - Cadastrar - US 60648', () => {
         cy.get('div.swal2-container').should('not.exist')
     })
 
-    // it('CT005 - Salvar com sucesso', () => {
-    //     cy.get('button.secondary').should('be.visible').and('be.enabled').click()
-    //     cy.get('input.inpunt-register').type(randomBytes(4).toString('hex'))
-    //     cy.get('button.btn-primary').click()
-    //     cy.get('h2#swal2-title').should('be.visible').and('have.text', 'Sucesso')
-    //     cy.get('div#swal2-html-container').should('be.visible').and('have.text', 'Registro salvo com sucesso')
-    //     cy.get('button.swal2-confirm').should('be.visible').and('be.enabled').and('have.text', 'Voltar').click()
-    //     cy.get('div.swal2-container').should('not.exist')
-    // })
+    it.skip('CT005 - Salvar com sucesso', () => {
+        cy.get('button.secondary').should('be.visible').and('be.enabled').click()
+        cy.get('input.inpunt-register').type(randomBytes(4).toString('hex'))
+        cy.get('button.btn-primary').click()
+        cy.get('h2#swal2-title').should('be.visible').and('have.text', 'Sucesso')
+        cy.get('div#swal2-html-container').should('be.visible').and('have.text', 'Registro salvo com sucesso')
+        cy.get('button.swal2-confirm').should('be.visible').and('be.enabled').and('have.text', 'Voltar').click()
+        cy.get('div.swal2-container').should('not.exist')
+    })
 
     it('CT006 - Sair sem salvar', () => {
         cy.get('button.secondary').should('be.visible').and('be.enabled').click()

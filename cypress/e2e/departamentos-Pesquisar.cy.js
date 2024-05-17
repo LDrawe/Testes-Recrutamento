@@ -37,7 +37,6 @@ describe('US 61433 - Test Case Departamentos - Pesquisar', () => {
                     if (!text.toLowerCase().includes(searchInput.toLowerCase())) continue
                     flag = true
                 }
-                console.log(rowTexts)
                 expect(flag).to.be.true
             }
         })
@@ -47,19 +46,25 @@ describe('US 61433 - Test Case Departamentos - Pesquisar', () => {
         const arrow = cy.get('div.ng-select-container:first').find('span:first')
         arrow.click()
         cy.get('div.ng-dropdown-panel-items').should('be.visible')
-        const responsavel = cy.get('div.ng-option:nth(9)')
+        const responsavel = cy.get('div.ng-option:nth(6)')
         responsavel.click()
+        let responsavelText
+        responsavel.invoke('text').then(val => {
+            responsavelText = val
+        })
         arrow.click()
         cy.get('div.item-multiselect').should('be.visible')
         cy.get('button.primary').click()
         cy.wait(1000)
-        cy.get('tbody').find('tr').each(row => {
-            cy.wrap(row).find('td:nth(1)')
-                .then((tds) => {
-                    responsavel.invoke('text').then(value => {
-                        expect(tds.text().trim(), 'Responsavel to be filtered').to.equal(value)
-                    })
+        cy.get('tbody tr').each(rows => {
+            if (rows.length === 0) {
+                cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
+            } else {
+                cy.wrap(rows).find('td:nth(1)').then((tds) => {
+                    console.log(tds.text())
+                    expect(tds.text().trim()).to.equal(responsavelText)
                 })
+            }
         })
     })
 

@@ -59,7 +59,7 @@ describe('Test Case Departamentos - Visualizar e Editar - US 67054', () => {
         cy.get('tbody tr').eq(0).click()
         cy.get('button.primary').click()
         cy.get('#nomeDepartamento').focus().clear().blur()
-        cy.get('.col-8 > :nth-child(3)').should('be.visible').invoke('text').then(text => {
+        cy.get('#nomeDepartamento + span').should('be.visible').invoke('text').then(text => {
             expect(text.replace('kr', '').replace('\xa0', '').trim()).to.equal('Campo de preenchimento obrigatório')
         })
         cy.get('#abreviacao').focus().clear().blur()
