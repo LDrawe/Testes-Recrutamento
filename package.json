@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "cypress.config.js",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "cypress": "^13.9.0"
   },
   "scripts": {
-    "start": "npx cypress run"
+    "cypress:run": "npx cypress run --reporter junit --reporter-options mochaFile=cypress/reports/junit/test-results-[hash].xml,toConsole=true",
+    "cy:open": "npx cypress open --config chromeWebSecurity=false"
   },
   "keywords": [],
   "author": "",
