@@ -91,6 +91,7 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
         });
     })
 
+    it.only('CT010- Teste Pesquisar ', () => {
         cy.intercept({ method: 'POST', url: '*', }).as('searchQuery')
         cy.get('span.ng-arrow-wrapper').each((arrow, categoryIndex) => {
             cy.wrap(arrow).click()
