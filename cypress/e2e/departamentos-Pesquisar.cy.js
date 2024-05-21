@@ -16,14 +16,15 @@ describe('US 61433 - Test Case Departamentos - Pesquisar', () => {
     })
 
     it('CT001 - Pesquisar texto', () => {
-        const searchButton = cy.get('.primary')
+        const searchButton = cy.get('button.primary')
+        searchButton.should('be.visible').and('be.enabled').and('have.text', 'Pesquisar')
         const searchBox = cy.get('input[placeholder="Ex: Recursos Humanos"]')
         const searchInput = 'Itix Gaming'
-        searchButton.should('be.visible').and('be.enabled').and('have.text', 'Pesquisar')
         searchBox.should('be.visible').and('be.enabled').and('have.attr', 'maxlength', 100)
         searchBox.clear().type(searchInput)
         searchBox.should('have.value', searchInput)
         searchButton.click()
+
         cy.wait(1500)
         cy.get('tbody tr').then(rows => {
             if (rows.length === 0) {
