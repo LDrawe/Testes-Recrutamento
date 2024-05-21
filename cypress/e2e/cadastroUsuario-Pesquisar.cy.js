@@ -1,5 +1,6 @@
 /// <reference types="Cypress" />
 import 'cypress-if'
+import { randomBytes } from 'crypto'
 
 describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
     before(() => {
@@ -31,12 +32,12 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
 
     it('CT003 - Teste filtro nome/tamanho do campo', () => {
         const searchInput = cy.get('input[placeholder="Nome de Usuário"]')
-        searchInput.type('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec congue vulputate pharetra. Sed est lectus, commodo at e')
+        searchInput.type(randomBytes(50).toString('hex'))
         searchInput.should(value => expect(value.val().length).to.be.equal(100)).and('have.attr', 'maxlength', 100)
     })
 
     it('CT004 - Teste lista de registros', () => {
-        const registros = cy.get('tbody').find('tr')
+        const registros = cy.get('tbody tr')
         registros.should('have.length', 10)
         registros.each($row => {
             cy.wrap($row).find('td')
@@ -46,14 +47,21 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
         })
     })
 
-    it('CT005 - CT005-Teste filtros/Limpar', () => {
-        const searchInput = cy.get('input[placeholder="Nome de Usuário"]')
-        searchInput.type('nauifnauifanuifpanfuipanaçanoçal')
+    it.only('CT005 - CT005-Teste filtros/Limpar', () => {
+        const searchBox = cy.get('input[placeholder="Nome de Usuário"]')
+        searchBox.type(randomBytes(6).toString('hex'))
+        for (let i = 0; i < 3; i++) {
+            let arrow = cy.get(`div.ng-select-container:nth(${i}) span:first`)
+            arrow.click()
+            cy.get('div.ng-option:nth(2)').click()
+            arrow.click()
+        }
         cy.get('button.btn-primary').click()
-        cy.wait(500)
         cy.get('tbody tr').should('have.length', 0)
-        cy.get('div.cluster-filter-select').find('span:first').click()
+        cy.get('div.cluster-filter-select span:first').click()
         cy.get('tbody tr').should('have.length', 10)
+        searchBox.should('have.value', '')
+        cy.get('div.item-multiselect').should('not.exist')
     })
 
     it('CT006 - Teste lista/visualizar', () => {
@@ -91,8 +99,7 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
         });
     })
 
-    it.only('CT010- Teste Pesquisar ', () => {
-        cy.intercept({ method: 'POST', url: '*', }).as('searchQuery')
+    it('CT010- Teste Pesquisar ', () => {
         cy.get('span.ng-arrow-wrapper').each((arrow, categoryIndex) => {
             cy.wrap(arrow).click()
             cy.get('div.ng-option').then(({ length }) => {
@@ -110,9 +117,9 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
                     const multiselect = cy.get('div.item-multiselect')
                     multiselect.should('be.visible').and('include.text', optionText)
                     cy.get('button.btn-primary').click()
-                    cy.wait('@searchQuery')
+                    cy.wait(100)
                     cy.get('tbody').if().then(() => {
-                        cy.get('tr').each(() => {
+                        cy.get('tbody tr').each(() => {
                             cy.get(`td:nth(${categoryIndex + 1})`).each(name => {
                                 expect(name.text().trim()).to.equal(optionText)
                             })
@@ -125,7 +132,7 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
         })
     })
     it('CT011 - Teste nenhum resultado encontrado', () => {
-        cy.get('input[placeholder="Nome de Usuário"]').type('nauifnauifanuifpanfuipanaçanoçal')
+        cy.get('input[placeholder="Nome de Usuário"]').type(randomBytes(5).toString('hex'))
         cy.get('button.btn-primary').click()
         cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
     })
