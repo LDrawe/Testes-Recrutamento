@@ -1,4 +1,5 @@
 /// <reference types="Cypress" />
+import 'cypress-if'
 
 describe('US 61433 - Test Case Departamentos - Pesquisar', () => {
     before(() => {
@@ -14,12 +15,12 @@ describe('US 61433 - Test Case Departamentos - Pesquisar', () => {
         cy.url().should('contain', 'setup-da-empresa/departamentos')
     })
 
-    it('CT001 - Pesquisar texto', () => {
-        const searchButton = cy.get('button.primary')
-        const searchBox = cy.get('.grow > .ng-valid')
-
-        // searchBox.should('be.visible').and('be.enabled').and('have.attr', 'maxlength', 100)
+    it.only('CT001 - Pesquisar texto', () => {
+        const searchButton = cy.get('.primary')
+        const searchBox = cy.get('input[placeholder="Ex: Recursos Humanos"]')
         const searchInput = 'Itix Gaming'
+        searchButton.should('be.visible').and('be.enabled').and('have.text', 'Pesquisar')
+        searchBox.should('be.visible').and('be.enabled').and('have.attr', 'maxlength', 100)
         searchBox.clear().type(searchInput)
         searchBox.should('have.value', searchInput)
         searchButton.click()
@@ -43,32 +44,49 @@ describe('US 61433 - Test Case Departamentos - Pesquisar', () => {
     })
 
     it('CT002 - Filtrar por responsável', () => {
-        const arrow = cy.get('div.ng-select-container:first').find('span:first')
+        cy.wait(500)
+        const arrow = cy.get('div.ng-select-container:first span:first')
         arrow.click()
         cy.get('div.ng-dropdown-panel-items').should('be.visible')
-        const responsavel = cy.get('div.ng-option:nth(6)')
-        responsavel.click()
-        let responsavelText
-        responsavel.invoke('text').then(val => {
-            responsavelText = val
-        })
-        arrow.click()
-        cy.get('div.item-multiselect').should('be.visible')
-        cy.get('button.primary').click()
-        cy.wait(1000)
-        cy.get('tbody tr').each(rows => {
-            if (rows.length === 0) {
-                cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
-            } else {
-                cy.wrap(rows).find('td:nth(1)').then((tds) => {
-                    console.log(tds.text())
-                    expect(tds.text().trim()).to.equal(responsavelText)
+        cy.get('div.ng-option').then(({ length }) => {
+            arrow.click()
+            for (let i = 0; i < length; i++) {
+                arrow.click()
+                let responsavel = cy.get(`div.ng-option:nth(${i})`)
+                responsavel.click()
+                let responsavelText = ''
+                responsavel.invoke('text').then((val) => {
+                    responsavelText = val
                 })
+                let multiselect = cy.get('div.item-multiselect')
+                multiselect.should('be.visible').and('include.text', responsavelText)
+                cy.get('button.primary').click()
+                cy.wait(500)
+                cy.get('tbody tr').if().then(() => {
+                    cy.get('td.description + td').each(name => {
+                        expect(name.text().trim()).to.equal(responsavelText)
+                    })
+                }).else().get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
+                cy.get('div.item-multiselect span.icon-multiselect').click()
+                multiselect.should('not.exist')
             }
         })
     })
 
-    it('CT003- Filtrar por status', () => {
+    it('CT003- Um ou mais filtros', () => {
+        const arrow = cy.get('div.ng-select-container:first').find('span:first')
+        arrow.click()
+        cy.get('div.ng-option:nth(6)').click()
+        cy.get('div.ng-option:nth(12)').click()
+        arrow.click()
+        cy.get('button.primary').click()
+        cy.wait(1000)
+        cy.get('td.description + td').each(responsible => {
+            expect(responsible.text().trim()).to.be.oneOf(['Marcos Juan Thiago Cardoso', 'Conjunto Conjunto Residencial 47A'])
+        })
+    })
+
+    it('CT004- Filtrar por status', () => {
         const states = ['Ativo', 'Inativo']
 
         for (let i = 0; i < states.length; i++) {
@@ -88,10 +106,19 @@ describe('US 61433 - Test Case Departamentos - Pesquisar', () => {
                 expect(td.text().trim()).to.equal(states[i])
             })
         }
-
     })
 
-    it('CT004 - Botão Limpar', () => {
+    it('CT005 - Paginação', () => {
+        const page1 = []
+        cy.get('td.description').each(id => page1.push(id.text()))
+        cy.get('.ci-chevron_right').click()
+        cy.wait(1000)
+        cy.get('td.description').each(id => {
+            expect(page1.includes(id)).to.be.false
+        })
+    })
+
+    it('CT006 - Botão Limpar', () => {
         cy.get('input[placeholder="Ex: Recursos Humanos"]').clear().type('MAX VERSTAPPEN')
         cy.get('button.primary').click()
         cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')

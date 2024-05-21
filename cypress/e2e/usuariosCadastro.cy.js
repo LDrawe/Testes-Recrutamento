@@ -1,11 +1,12 @@
 /// <reference types="Cypress" />
+import 'cypress-if'
 
 describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
     before(() => {
         cy.clearCookies()
         cy.getCookies().should('be.empty')
     })
-    
+
     beforeEach(() => {
         cy.visit('/')
         cy.title().should('contain', 'Recrutamento')
@@ -16,14 +17,14 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
 
     it('CT001 - Test Botão Adicionar Usuário', () => {
         const addUser = cy.get('button.secondary')
-        addUser.should('be.visible').and('not.be.disabled')
+        addUser.should('be.visible').and('be.enabled')
         addUser.click()
         cy.url().should('contain', 'administracao/usuarios/form')
     })
 
     it('CT002 - Teste filtro nome/campo alfanumérico', () => {
         const searchInput = cy.get('input[placeholder="Nome de Usuário"]')
-        searchInput.should('be.visible').and('not.be.disabled')
+        searchInput.should('be.visible').and('be.enabled')
         searchInput.type('Rubens Barrichello')
         searchInput.should('have.value', 'Rubens Barrichello')
     })
@@ -31,7 +32,7 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
     it('CT003 - Teste filtro nome/tamanho do campo', () => {
         const searchInput = cy.get('input[placeholder="Nome de Usuário"]')
         searchInput.type('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec congue vulputate pharetra. Sed est lectus, commodo at e')
-        searchInput.should(value => expect(value.val().length).to.be.equal(100))
+        searchInput.should(value => expect(value.val().length).to.be.equal(100)).and('have.attr', 'maxlength', 100)
     })
 
     it('CT004 - Teste lista de registros', () => {
@@ -48,7 +49,7 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
     it('CT005 - CT005-Teste filtros/Limpar', () => {
         const searchInput = cy.get('input[placeholder="Nome de Usuário"]')
         searchInput.type('nauifnauifanuifpanfuipanaçanoçal')
-        cy.get('button.btn.btn-primary').click()
+        cy.get('button.btn-primary').click()
         cy.wait(500)
         cy.get('tbody tr').should('have.length', 0)
         cy.get('div.cluster-filter-select').find('span:first').click()
@@ -88,5 +89,43 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
         selectItem.invoke('text').then(text => {
             cy.get('div.item-multiselect').should('be.visible').and('contain.text', text);
         });
+    })
+
+        cy.intercept({ method: 'POST', url: '*', }).as('searchQuery')
+        cy.get('span.ng-arrow-wrapper').each((arrow, categoryIndex) => {
+            cy.wrap(arrow).click()
+            cy.get('div.ng-option').then(({ length }) => {
+                cy.get('div.ng-dropdown-panel-items').should('be.visible')
+                cy.wrap(arrow).click()
+                for (let i = 0; i < length; i++) {
+                    cy.wrap(arrow).click()
+                    const option = cy.get(`div.ng-option:nth(${i})`)
+                    option.click()
+                    let optionText = ''
+                    option.invoke('text').then((val) => {
+                        optionText = val
+                    })
+                    cy.wrap(arrow).click()
+                    const multiselect = cy.get('div.item-multiselect')
+                    multiselect.should('be.visible').and('include.text', optionText)
+                    cy.get('button.btn-primary').click()
+                    cy.wait('@searchQuery')
+                    cy.get('tbody').if().then(() => {
+                        cy.get('tr').each(() => {
+                            cy.get(`td:nth(${categoryIndex + 1})`).each(name => {
+                                expect(name.text().trim()).to.equal(optionText)
+                            })
+                        })
+                    }).else().get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
+                    cy.get('div.item-multiselect span.icon-multiselect').click()
+                    multiselect.should('not.exist')
+                }
+            })
+        })
+    })
+    it('CT011 - Teste nenhum resultado encontrado', () => {
+        cy.get('input[placeholder="Nome de Usuário"]').type('nauifnauifanuifpanfuipanaçanoçal')
+        cy.get('button.btn-primary').click()
+        cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
     })
 })
