@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "cypress.config.js",
-  "dependencies": {},
   "devDependencies": {
-    "cypress": "^13.9.0"
+    "cypress": "^13.9.0",
+    "cypress-if": "^1.12.0"
   },
   "scripts": {
     "cypress:run": "npx cypress run --reporter junit --reporter-options mochaFile=cypress/reports/junit/test-results-[hash].xml,toConsole=true",
