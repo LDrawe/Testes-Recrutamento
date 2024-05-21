@@ -4,12 +4,18 @@
   "description": "",
   "main": "cypress.config.js",
   "devDependencies": {
+    "cross-env": "^7.0.3",
+    "cross-var": "^1.1.0",
     "cypress": "^13.9.0",
-    "cypress-if": "^1.12.0"
+    "cypress-if": "^1.12.0",
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.2"
   },
   "scripts": {
     "cypress:run": "npx cypress run --reporter junit --reporter-options mochaFile=cypress/reports/junit/test-results-[hash].xml,toConsole=true",
-    "cy:open": "npx cypress open --config chromeWebSecurity=false"
+    "cy:open": "npx cypress open --config chromeWebSecurity=false",
+    "cy:record": "dotenv -- cross-var npx cypress run --record --key $CYPRESS_KEY",
+    "print": "dotenv -- cross-var echo $CYPRESS_KEY"
   },
   "keywords": [],
   "author": "",
