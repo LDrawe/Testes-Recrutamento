@@ -47,7 +47,7 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
         })
     })
 
-    it('CT005 - CT005-Teste filtros/Limpar', () => {
+    it('CT005 - Teste filtros/Limpar', () => {
         const searchBox = cy.get('input[placeholder="Nome de Usuário"]')
         searchBox.type(randomBytes(6).toString('hex'))
         for (let i = 0; i < 3; i++) {
@@ -117,7 +117,7 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
                     const multiselect = cy.get('div.item-multiselect')
                     multiselect.should('be.visible').and('include.text', optionText)
                     cy.get('button.btn-primary').click()
-                    cy.wait(100)
+                    cy.wait(300)
                     cy.get('tbody').if().then(() => {
                         cy.get('tbody tr').each(() => {
                             cy.get(`td:nth(${categoryIndex + 1})`).each(name => {
