@@ -25,7 +25,7 @@ describe('Test Case Vagas Afirmativas - Cadastrar - US 60648', () => {
 
     it('CT002 - Botão Salvar', () => {
         cy.get('button.secondary').click()
-        cy.get('input.inpunt-register').type('NAFJKANKFJA')
+        cy.get('input.inpunt-register').type('Teste')
         cy.get('button.btn-primary').should('be.enabled')
     })
 
@@ -45,7 +45,7 @@ describe('Test Case Vagas Afirmativas - Cadastrar - US 60648', () => {
         cy.get('div.swal2-container').should('not.exist')
     })
 
-    it.skip('CT005 - Salvar com sucesso', () => {
+    it('CT005 - Salvar com sucesso', () => {
         cy.get('button.secondary').should('be.visible').and('be.enabled').click()
         cy.get('input.inpunt-register').type(randomBytes(4).toString('hex'))
         cy.get('button.btn-primary').click()
@@ -57,7 +57,7 @@ describe('Test Case Vagas Afirmativas - Cadastrar - US 60648', () => {
 
     it('CT006 - Sair sem salvar', () => {
         cy.get('button.secondary').should('be.visible').and('be.enabled').click()
-        cy.get('input.inpunt-register').type(randomBytes(4).toString('hex'))
+        cy.get('input.inpunt-register').type('Teste')
         const voltar = cy.get('button.btn-secondary')
         voltar.click()
         cy.get('h2#swal2-title').should('be.visible').and('have.text', 'Atenção')

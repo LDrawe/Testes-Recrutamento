@@ -48,7 +48,7 @@ describe('Test Case Vagas Afirmativas - Pesquisar e Editar - US 61449', () => {
 
     it('CT004 - Editando descriçao da vaga', () => {
         cy.get(':nth-child(1) > .rounded-end > .text-gray').click()
-        cy.get('#vagaInput').clear().type('fbanka')
+        cy.get('#vagaInput').clear().type('Teste')
         cy.get('.btn-text').click()
         cy.get('.swal2-popup').should('be.visible')
         cy.get('.swal2-title').should('be.visible').and('have.text', 'Atenção')

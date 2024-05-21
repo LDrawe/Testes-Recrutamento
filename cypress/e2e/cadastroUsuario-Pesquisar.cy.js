@@ -47,7 +47,7 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
         })
     })
 
-    it.only('CT005 - CT005-Teste filtros/Limpar', () => {
+    it('CT005 - CT005-Teste filtros/Limpar', () => {
         const searchBox = cy.get('input[placeholder="Nome de Usuário"]')
         searchBox.type(randomBytes(6).toString('hex'))
         for (let i = 0; i < 3; i++) {

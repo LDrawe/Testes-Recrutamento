@@ -15,7 +15,7 @@ describe('US 61433 - Test Case Departamentos - Pesquisar', () => {
         cy.url().should('contain', 'setup-da-empresa/departamentos')
     })
 
-    it.only('CT001 - Pesquisar texto', () => {
+    it('CT001 - Pesquisar texto', () => {
         const searchButton = cy.get('.primary')
         const searchBox = cy.get('input[placeholder="Ex: Recursos Humanos"]')
         const searchInput = 'Itix Gaming'
