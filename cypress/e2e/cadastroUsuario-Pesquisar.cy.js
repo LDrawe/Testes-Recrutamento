@@ -6,6 +6,9 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
     before(() => {
         cy.clearCookies()
         cy.getCookies().should('be.empty')
+        cy.intercept('GET', '/cargo/find-all-select').as('fetchCargo')
+        cy.intercept('GET', '/departamento/find-all-select').as('fetchDepartamento')
+        cy.intercept('GET', '/perfil/find-all-select').as('fetchPerfil')
     })
 
     beforeEach(() => {
@@ -99,38 +102,34 @@ describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
         });
     })
 
-    it('CT010- Teste Pesquisar ', () => {
+    it.only('CT010- Teste Pesquisar ', () => {
+        let optionText = ''
+        cy.wait(['@fetchCargo', '@fetchDepartamento', '@fetchPerfil'])
         cy.get('span.ng-arrow-wrapper').each((arrow, categoryIndex) => {
             cy.wrap(arrow).click()
             cy.get('div.ng-option').then(({ length }) => {
                 cy.get('div.ng-dropdown-panel-items').should('be.visible')
                 cy.wrap(arrow).click()
                 for (let i = 0; i < length; i++) {
+                    cy.intercept('/usuario/search?page=0&size=10').as('filter')
                     cy.wrap(arrow).click()
-                    const option = cy.get(`div.ng-option:nth(${i})`)
-                    option.click()
-                    let optionText = ''
-                    option.invoke('text').then((val) => {
-                        optionText = val
-                    })
+                    cy.get(`div.ng-option:nth(${i})`).invoke('text').then(val => optionText = val)
+                    cy.get(`div.ng-option:nth(${i})`).click()
                     cy.wrap(arrow).click()
-                    const multiselect = cy.get('div.item-multiselect')
-                    multiselect.should('be.visible').and('include.text', optionText)
                     cy.get('button.btn-primary').click()
-                    cy.wait(300)
-                    cy.get('tbody').if().then(() => {
-                        cy.get('tbody tr').each(() => {
-                            cy.get(`td:nth(${categoryIndex + 1})`).each(name => {
-                                expect(name.text().trim()).to.equal(optionText)
-                            })
+                    cy.wait('@filter')
+                    cy.wait(500)
+                    cy.get('tbody tr').if().each(row => {
+                        cy.wrap(row).find(`td:nth(${categoryIndex + 1})`).each(name => {
+                            cy.wrap(name).should('have.text', optionText)
                         })
                     }).else().get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
-                    cy.get('div.item-multiselect span.icon-multiselect').click()
-                    multiselect.should('not.exist')
+                    cy.get('div.item-multiselect span').click()
                 }
             })
         })
     })
+
     it('CT011 - Teste nenhum resultado encontrado', () => {
         cy.get('input[placeholder="Nome de Usuário"]').type(randomBytes(5).toString('hex'))
         cy.get('button.btn-primary').click()

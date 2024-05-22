@@ -56,10 +56,12 @@ describe('Test Case Departamentos - Visualizar e Editar - US 67054', () => {
     })
 
     it.only('CT004 - Remover dados', () => {
+        cy.intercept('GET', '/departamento/*').as('departamento')
+        cy.intercept('GET', '/usuario/usuario-email').as('email')
         cy.get('tbody tr').eq(0).click()
         cy.get('button.primary').click()
-        cy.wait(200)
-        cy.get('input#nomeDepartamento').clear()
+        cy.wait(['@departamento', '@email'])
+        cy.get('input#nomeDepartamento').clear().blur()
         cy.get('input#abreviacao').clear().blur()
         cy.get('.col-8 > :nth-child(3)').should('be.visible').invoke('text').then(text => {
             expect(text.replace('kr', '').replace('\xa0', '').trim()).to.equal('Campo de preenchimento obrigatório')
@@ -95,7 +97,7 @@ describe('Test Case Departamentos - Visualizar e Editar - US 67054', () => {
         cy.url().should('not.contain', '/form')
     })
 
-    it.only('CT008 - Voltar após clicar em editar', () => {
+    it('CT008 - Voltar após clicar em editar', () => {
         cy.get('tbody tr').eq(0).click()
         cy.get('button.primary').click()
         cy.get('button.secondary').click()
