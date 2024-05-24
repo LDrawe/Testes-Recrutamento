@@ -2,7 +2,7 @@
 import 'cypress-if'
 import { randomBytes } from 'crypto'
 
-describe('US 70248 - CT Cadastro de Usuários - Pesquisar', () => {
+describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
     before(() => {
         cy.clearCookies()
         cy.getCookies().should('be.empty')

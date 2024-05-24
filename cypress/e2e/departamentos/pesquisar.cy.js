@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 import 'cypress-if'
 
-describe('US 61433 - Test Case Departamentos - Pesquisar', () => {
+describe('Suit Test Departamentos - Pesquisar', () => {
     before(() => {
         cy.clearCookies()
         cy.getCookies().should('be.empty')

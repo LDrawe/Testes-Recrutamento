@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 import { randomBytes } from 'crypto'
 
-describe('Test Case Departamentos - Visualizar e Editar - US 67054', () => {
+describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     before(() => {
         cy.clearCookies()
         cy.getCookies().should('be.empty')
@@ -16,21 +16,16 @@ describe('Test Case Departamentos - Visualizar e Editar - US 67054', () => {
     })
 
     it('CT001 - Exibir departamentos', () => {
-        cy.get('tbody tr')
-            .then(rows => {
-                if (rows.length === 0) {
-                    cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
-                } else {
-                    expect(rows.length).to.be.at.most(10)
-                    for (let i = 0; i < rows.length; i++) {
-                        let linha = cy.wrap(rows[i])
-                        linha.get('td.description').should('be.visible').and('not.be.empty')
-                        linha.get(`:nth-child(${i + 1}) > :nth-child(4) > label`).invoke('text').then(text => {
-                            expect(text).to.match(/^(Ativo|Inativo)[^\w]*$/)
-                        })
-                    }
-                }
-            })
+        cy.get('tbody tr').if().then(rows => {
+            expect(rows.length).to.be.at.most(10)
+            for (let i = 0; i < rows.length; i++) {
+                let linha = cy.wrap(rows[i])
+                linha.get('td.description').should('be.visible').and('not.be.empty')
+                linha.get(`:nth-child(${i + 1}) > :nth-child(4) > label`).invoke('text').then(text => {
+                    expect(text).to.match(/^(Ativo|Inativo)[^\w]*$/)
+                })
+            }
+        }).else().cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
     })
 
     it('CT002 - Visualizar departamento', () => {

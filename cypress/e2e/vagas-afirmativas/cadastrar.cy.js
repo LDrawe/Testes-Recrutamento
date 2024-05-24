@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 import { randomBytes } from 'crypto'
 
-describe('Test Case Vagas Afirmativas - Cadastrar - US 60648', () => {
+describe('Suit Test Vagas Afirmativas - Cadastrar (US 60648)', () => {
     before(() => {
         cy.clearCookies()
         cy.getCookies().should('be.empty')

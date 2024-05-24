@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 import { randomBytes } from 'crypto'
 
-describe('Test Case Vagas Afirmativas - Pesquisar e Editar - US 61449', () => {
+describe('Suit Test Vagas Afirmativas - Pesquisar e Editar (US 61449)', () => {
     before(() => {
         cy.clearCookies()
         cy.getCookies().should('be.empty')
@@ -16,7 +16,7 @@ describe('Test Case Vagas Afirmativas - Pesquisar e Editar - US 61449', () => {
     })
 
     it('CT001 - Exibir vagas', () => {
-        const table = cy.get('tbody').find('tr')
+        const table = cy.get('tbody tr')
         table.should('have.length.at.most', 10)
         table.then(rows => {
             if (rows.length === 0) {
