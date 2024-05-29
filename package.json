@@ -11,10 +11,9 @@
     "dotenv-cli": "^7.4.2"
   },
   "scripts": {
-    "cypress:run": "npx cypress run --reporter junit --reporter-options mochaFile=cypress/reports/junit/test-results-[hash].xml,toConsole=true",
+    "cy:run": "npx cypress run --reporter junit --reporter-options mochaFile=cypress/reports/junit/test-results-[hash].xml,toConsole=true",
     "cy:open": "npx cypress open --config chromeWebSecurity=false",
-    "cy:record": "dotenv -- cross-var npx cypress run --record --key $CYPRESS_KEY",
-    "print": "dotenv -- cross-var echo $CYPRESS_KEY"
+    "cy:record": "dotenv -- cross-var npx cypress run --record --key $CYPRESS_KEY"
   },
   "keywords": [],
   "author": "",
