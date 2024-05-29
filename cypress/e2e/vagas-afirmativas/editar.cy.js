@@ -16,18 +16,18 @@ describe('Suit Test Vagas Afirmativas - Pesquisar e Editar (US 61449)', () => {
     })
 
     it('CT001 - Exibir vagas', () => {
-        const table = cy.get('tbody tr')
-        table.should('have.length.at.most', 10)
-        table.then(rows => {
-            if (rows.length === 0) {
+        const rows = cy.get('tbody tr')
+        rows.should('have.length.at.most', 10)
+        rows.then(({length}) => {
+            if (length === 0) {
                 cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
             }
         })
 
-        table.each(td => {
-            expect(td['0'].children[0].textContent).to.have.length.greaterThan(0)
-            expect(td['0'].children[1].textContent.trim().toLowerCase()).to.include('ativo')
-            expect(td['0'].children[2].textContent).to.equal('Editar')
+        rows.each(row => {
+            expect(row['0'].children[0].textContent).to.have.length.greaterThan(0)
+            expect(row['0'].children[1].textContent.trim().toLowerCase()).to.include('ativo')
+            expect(row['0'].children[2].textContent).to.equal('Editar')
         })
     })
 
