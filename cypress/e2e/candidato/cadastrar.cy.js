@@ -264,7 +264,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC036 - Botão Continuar todos os campos obrigatórios preenchidos', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         cy.get('p.title-section').should('be.visible').and('have.text', 'Experiência Acadêmica')
     })
 
@@ -279,7 +279,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC038 - Validação campo "Formação" item não encontrado', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao')
         formacao.click().type('Random')
         cy.get('div.ng-option.ng-option-disabled').should('be.visible').and('have.text', 'Item não encontrado!')
@@ -287,14 +287,14 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC039 - Validação campo "Formação " vazio', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao input')
         formacao.focus().blur()
         cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC040 - Validação Opções do Campo "Formação"', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
         const options = ['Fundamental', 'Médio', 'Técnico', 'Superior']
@@ -304,7 +304,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC041 - Validação Campo "Curso" vazio', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
         cy.get('div.ng-option').eq(2).click()
@@ -313,7 +313,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC042 - Validação Campo "Curso" mais de 256 caracteres', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
         cy.get('div.ng-option').eq(2).click()
@@ -323,7 +323,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC043 - Validação Campo "Grau de Escolaridade" quando o campo "Formação" for diferente de "Superior"', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
         cy.get('div.ng-option').eq(0).click()
@@ -340,7 +340,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC044 - Validação Campo "Grau de Escolaridade" quando o campo "Formação" for diferente de "Superior"', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
         cy.get('div.ng-option').eq(3).click()
@@ -352,7 +352,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC045 - Validação Campo "Instituição" vazio', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
         cy.get('div.ng-option').eq(2).click()
@@ -361,7 +361,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC046 - Validação Campo "Instituição" mais de 256 caracteres', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
         cy.get('div.ng-option').eq(2).click()
@@ -371,7 +371,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC047 - Validação Campo "Status" item não encontrado', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#status')
         formacao.click().type('Random')
         cy.get('div.ng-option.ng-option-disabled').should('be.visible').and('have.text', 'Item não encontrado!')
@@ -379,7 +379,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC048 - Validação Campo "Status" item encontrado', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         const formacao = cy.get('#status > .ng-select-container > .ng-value-container > .ng-input > input')
         const options = ['Concluído', 'Em Andamento', 'Incompleto']
         options.forEach(option => {
@@ -389,7 +389,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC049 - Validação Campo "Curso" quando "Formação" for diferente de "Técnico" ou "Superior"', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         for (let i = 0; i < 2; i++) {
             cy.get('#formacao').click()
             cy.get('div.ng-option').eq(i).click()
@@ -398,7 +398,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC050 - Validação Campo "Curso" quando "Formação" for  "Técnico" ou "Superior"', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         for (let i = 2; i < 4; i++) {
             cy.get('#formacao').click()
             cy.get('div.ng-option').eq(i).click()
@@ -407,7 +407,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC051 - Validação Campo "Data Término" quando campo "status" for Incompleto/Em andamento.', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         cy.get('#formacao').click()
         cy.get('div.ng-option').eq(3).click()
         cy.get('#grauEscolaridade').click()
@@ -424,7 +424,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC052 - Validação Campo "Data Término" quando campo "status" for Concluído', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         cy.get('#formacao').click()
         cy.get('div.ng-option').eq(3).click()
         cy.get('#grauEscolaridade').click()
@@ -442,7 +442,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC053 - Validação campo "Data inicio" maior que a data atual', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         cy.get('#formacao').click()
         cy.get('div.ng-option').eq(3).click()
         cy.get('#grauEscolaridade').click()
@@ -457,7 +457,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC054 - Validação campo "Data Início" maior que a "Data Termino"', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         cy.get('#formacao').click()
         cy.get('div.ng-option').eq(3).click()
         cy.get('#grauEscolaridade').click()
@@ -472,7 +472,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC055 - Teste Botão "Adicionar outra formação"', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         cy.get('#formacao').click()
         cy.get('div.ng-option').eq(0).click()
         cy.get('#status').click()
@@ -487,61 +487,61 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC056 - Teste Botão "Adicionar outra formação" com campos  não preenchidos', () => {
-        cy.fillForm(false)
+        cy.fillCandidatoForm(false)
         cy.get('.col-sm-12 > .btn').click()
         cy.get('div.title-section.group-form-area span').should('not.exist')
         cy.get('.error-msg').should('be.visible')
     })
 
     it('TC057 - Teste Botão "Continuar"', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('p.title-section').should('be.visible').and('have.text', 'Experiência Profissional')
     })
 
     it('TC058 - Validação campo "Empresa" Vazio', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#empresa').focus().blur()
         cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC059 - Validação campo "Empresa" mais de 256 caracteres', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#empresa').type(randomBytes(130).toString('hex'))
         cy.get('div.error-msg').should('be.visible').and('have.text', ' Campo excedeu o tamanho limite de caracteres ')
     })
 
     it('TC060 - Validação campo "Cargo" Vazio', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('.ng-arrow-wrapper').click().click()
         cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC061 - Validação listbox "Cargo" item não encontrado', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#cargo').click().type('random')
         cy.get('div.ng-option.ng-option-disabled').should('be.visible').and('have.text', 'Item não encontrado!')
     })
 
     it('TC062 - Validação listbox "Cargo" item encontrado', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#cargo').click().type('Desenvolvedor')
         cy.get('div.ng-option').should('be.visible').and('have.text', 'Desenvolvedor')
     })
 
     it('TC063 - Validação campo "Descrição das Atividades" Vazio', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#descricaoAtividades').focus().blur()
         cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC064 - Validação campo "Descrição das Atividades" mais de 400 caracteres', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#descricaoAtividades').type(randomBytes(210).toString('hex')).blur()
         cy.get('div.error-msg').should('be.visible').and('have.text', ' Campo excedeu o tamanho limite de caracteres ')
     })
 
     it('TC065 - Validação campo "Data Início" maior que a data atual', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#dataInicio > .input-date-picker > img').click()
         cy.get('[aria-label="Select year"]').select('2025')
         cy.get('[aria-label="domingo, 8 de junho de 2025"] > .btn-light').click()
@@ -549,7 +549,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC066 - Validação campo "Data Início" maior que a "Data Termino"', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#dataInicio > .input-date-picker > img').click()
         cy.get('.ngb-dp-today > .btn-light').click()
         cy.get('#dataTermino > .input-date-picker > img').click()
@@ -558,7 +558,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC067 - Validação campo "Data Início" vazio', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#dataInicio > .input-date-picker > img').click()
         cy.get('.ngb-dp-today > .btn-light').click()
         cy.get('#dataInicio > .input-date-picker > img').click()
@@ -568,7 +568,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC068 - Teste Botão "Adicionar outra Experiência" com campos  não preenchidos', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('.col-sm-12 > .btn').click()
         const selectors = ['#empresa', '#cargo', '#descricaoAtividades', 'div.errorBorder:has(#dataInicio)']
         for (const campo of selectors) {
@@ -577,7 +577,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC069 - Teste Botão "Adicionar outra Experiência"', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#empresa').type(randomBytes(30).toString('hex'))
         cy.get('#cargo').click().type('Desenvolvedor')
         cy.get('div.ng-option').click()
@@ -589,7 +589,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC070 - Teste Botão "Adicionar outra Experiência"', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#empresa').type(randomBytes(30).toString('hex'))
         cy.get('#cargo').click().type('Desenvolvedor')
         cy.get('div.ng-option').click()
@@ -602,7 +602,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it.skip('TC071 - Teste Botão Continuar', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('#empresa').type(randomBytes(30).toString('hex'))
         cy.get('#cargo').click().type('Desenvolvedor')
         cy.get('div.ng-option').click()
@@ -617,7 +617,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it.skip('TC072 - Teste Botão "Voltar"  Experiência profissional.', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('.justify-content-between > .col-3 > .btn').click()
         cy.get('p.title-section').should('be.visible').and('have.text', 'Experiência Acadêmica')
         cy.get('input.ng-pristine').each(campo => {
@@ -626,7 +626,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     })
 
     it('TC073 - Teste Botão voltar Formação Acadêmica', () => {
-        cy.fillForm()
+        cy.fillCandidatoForm()
         cy.get('.justify-content-between > .col-3 > .btn').click()
         cy.get('.justify-content-between > .col-3 > .btn').click()
         cy.get('.p-0 > :nth-child(1)').should('be.visible').and('have.text', ' Informações Pessoais ')

@@ -25,9 +25,9 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add('trim', selector =>
     cy.get(selector).invoke('text').then(text => text.replace('kr', '').replace('\xa0', '').trim())
-);
+)
 
-Cypress.Commands.add('fillForm', (continuar = true) => {
+Cypress.Commands.add('fillCandidatoForm', (continuar = true) => {
     cy.get('span.h1').click()
     cy.get('.input-style').type('Meu Nome Test')
     cy.get('span.h6').click()
@@ -59,4 +59,4 @@ Cypress.Commands.add('fillForm', (continuar = true) => {
         cy.get('.ngb-dp-today > .btn-light').click()
         cy.get('.col-2 > .btn').click()
     }
-});
+})
