@@ -47,7 +47,7 @@ Cypress.Commands.add('fillCandidatoForm', (continuar = true) => {
     cy.get('#referencia').type('Do lado da CEF')
     cy.get('.col-2 > .btn').click()
 
-    if(continuar) {
+    if (continuar) {
         cy.get('#formacao').click()
         cy.get('div.ng-option').eq(0).click()
         cy.get('#status').click()
@@ -58,5 +58,24 @@ Cypress.Commands.add('fillCandidatoForm', (continuar = true) => {
         cy.get('#dataTermino > .input-date-picker > img').click()
         cy.get('.ngb-dp-today > .btn-light').click()
         cy.get('.col-2 > .btn').click()
+    }
+})
+
+Cypress.Commands.add('fillCurriculumForm', (continuar = true, cep = '18304735') => {
+    cy.get('#nome').type('Teste')
+    cy.get('#sobrenome').type('Sobreteste')
+    cy.get('#email').type('teste@gmail.com')
+    cy.get('.input-date-picker > img').click()
+    cy.get('.ngb-dp-footer > :nth-child(3)').click()
+    cy.get('#telefone').type('32958475687')
+    cy.get('#cpf').type('66654451007')
+    cy.get('.btn').click()
+
+    if (continuar) {
+        cy.get('#cep').type(cep)
+        cy.wait('@cep')
+        cy.get('#numero').type('1')
+        cy.get('#complemento').type('Apt 42')
+        cy.get('#referencia').type('Subindo o morro')
     }
 })
