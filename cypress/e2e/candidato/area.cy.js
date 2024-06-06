@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 import { randomBytes } from 'crypto'
 
-describe('Suit Test Candidato - Cadastrar', () => {
+describe('Suit Test Area do Candidato', () => {
     before(() => {
         cy.clearCookies()
         cy.getCookies().should('be.empty')
