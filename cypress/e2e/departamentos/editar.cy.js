@@ -1,4 +1,5 @@
 /// <reference types="Cypress" />
+import 'cypress-if'
 import { randomBytes } from 'crypto'
 
 describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
@@ -25,11 +26,13 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
                     expect(text).to.match(/^(Ativo|Inativo)[^\w]*$/)
                 })
             }
-        }).else().cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
+        }).else().then(() => cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado'))
     })
 
-    it('CT002 - Visualizar departamento', () => {
-        cy.get('tbody tr').eq(0).click()
+    it('[Bug] CT002 - Visualizar departamento', () => {
+        cy.intercept('/departamento/*').as('departamento')
+        cy.get('tbody tr').eq(1).click()
+        cy.wait('@departamento')
         cy.url().should('contain', 'setup-da-empresa/departamentos/form')
         cy.get('input[type="checkbox"]').should('exist').and('be.disabled')
         cy.get('span.slider').should('be.visible')
@@ -43,17 +46,19 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     })
 
     it('CT003 - Editar departamento', () => {
-        cy.get('tbody tr').eq(0).click()
+        cy.intercept('/departamento/*').as('departamento')
+        cy.get('tbody tr').eq(5).click()
+        cy.wait('@departamento')
         cy.get('button.primary').click()
         cy.get('input:not([id="emailResponsavel"])').each(input => {
             expect(input).to.be.enabled
         })
     })
 
-    it.only('CT004 - Remover dados', () => {
+    it('CT004 - Remover dados', () => {
         cy.intercept('GET', '/departamento/*').as('departamento')
         cy.intercept('GET', '/usuario/usuario-email').as('email')
-        cy.get('tbody tr').eq(0).click()
+        cy.get('tbody tr').eq(5).click()
         cy.get('button.primary').click()
         cy.wait(['@departamento', '@email'])
         cy.get('input#nomeDepartamento').clear().blur()
@@ -67,7 +72,9 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     })
 
     it('CT005 - Responsável pelo Departamento', () => {
-        cy.get('tbody tr').eq(0).click()
+        cy.intercept('/departamento/*').as('departamento')
+        cy.get('tbody tr').eq(5).click()
+        cy.wait('@departamento')
         cy.get('button.primary').click()
         cy.get('.ng-arrow-wrapper').click()
         cy.get('div.ng-option:nth(3)').click()
@@ -76,7 +83,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     })
 
     it('CT006 - Apagar Responsável', () => {
-        cy.get('tbody tr').eq(0).click()
+        cy.get('tbody tr').eq(5).click()
         cy.get('button.primary').click()
         cy.get('.ng-arrow-wrapper').click()
         cy.get('div.ng-option:nth(3)').click()
@@ -87,13 +94,13 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     })
 
     it('CT007 - Voltar sem editar', () => {
-        cy.get('tbody tr').eq(0).click()
+        cy.get('tbody tr').eq(5).click()
         cy.get('button.secondary').click()
         cy.url().should('not.contain', '/form')
     })
 
     it('CT008 - Voltar após clicar em editar', () => {
-        cy.get('tbody tr').eq(0).click()
+        cy.get('tbody tr').eq(5).click()
         cy.get('button.primary').click()
         cy.get('button.secondary').click()
         cy.get('#swal2-title').should('be.visible').and('have.text', 'Confirmar')
@@ -105,13 +112,13 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     })
 
     it('CT008 - Salvar alterações', () => {
-        cy.get('tbody tr').eq(0).click()
+        cy.get('tbody tr').eq(5).click()
         cy.get('button.primary').click()
         cy.get('span.slider').click()
         cy.get('#nomeDepartamento').clear().type(randomBytes(3).toString('hex'))
         cy.get('#abreviacao').clear().type(randomBytes(2).toString('hex'))
         cy.get('.ng-arrow-wrapper').click()
-        cy.get(`div.ng-option:nth(${Math.floor(Math.random() * 10)})`).click()
+        cy.get(`div.ng-option:nth(1)`).click()
         cy.get('.ng-arrow-wrapper').click()
         cy.get('button.primary').click()
         cy.get('#swal2-title').should('be.visible').and('have.text', 'Sucesso')

@@ -11,7 +11,7 @@ describe('Suit Test Vagas Afirmativas - Cadastrar (US 60648)', () => {
         cy.visit('/')
         cy.title().should('contain', 'Recrutamento')
         cy.get('li > div.wrapper').eq(2).click()
-        cy.get('.sub-menu > :nth-child(16)').click()
+        cy.get('.sub-menu > :nth-child(15)').click()
         cy.url().should('contain', 'setup-da-empresa/vagas-afirmativas')
     })
 

@@ -10,12 +10,14 @@ describe('Suit Test Departamentos - Pesquisar', () => {
     beforeEach(() => {
         cy.visit('/')
         cy.title().should('contain', 'Recrutamento')
+        cy.intercept('/departamento/search*').as('pesquisa')
+        cy.intercept('/usuario/find-all-select').as('select')
         cy.get('li > div.wrapper').eq(2).click()
         cy.contains('ul.sub-menu > li:nth-child(4)', 'Departamentos').click()
         cy.url().should('contain', 'setup-da-empresa/departamentos')
     })
 
-    it('CT001 - Pesquisar texto', () => {
+    it('[Bug] CT001 - Pesquisar texto', () => {
         const searchButton = cy.get('button.primary')
         searchButton.should('be.visible').and('be.enabled').and('have.text', 'Pesquisar')
         const searchBox = cy.get('input[placeholder="Ex: Recursos Humanos"]')
@@ -25,7 +27,7 @@ describe('Suit Test Departamentos - Pesquisar', () => {
         searchBox.should('have.value', searchInput)
         searchButton.click()
 
-        cy.wait(1500)
+        cy.wait('@pesquisa')
         cy.get('tbody tr').then(rows => {
             if (rows.length === 0) {
                 cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
@@ -45,13 +47,14 @@ describe('Suit Test Departamentos - Pesquisar', () => {
     })
 
     it('CT002 - Filtrar por responsável', () => {
-        cy.wait(500)
+        cy.wait(['@pesquisa', '@select'])
         const arrow = cy.get('div.ng-select-container:first span:first')
         arrow.click()
         cy.get('div.ng-dropdown-panel-items').should('be.visible')
         cy.get('div.ng-option').then(({ length }) => {
             arrow.click()
             for (let i = 0; i < length; i++) {
+                cy.intercept('/departamento/search*').as('pesquisa')
                 arrow.click()
                 let responsavel = cy.get(`div.ng-option:nth(${i})`)
                 responsavel.click()
@@ -62,7 +65,8 @@ describe('Suit Test Departamentos - Pesquisar', () => {
                 let multiselect = cy.get('div.item-multiselect')
                 multiselect.should('be.visible').and('include.text', responsavelText)
                 cy.get('button.primary').click()
-                cy.wait(500)
+                cy.wait('@pesquisa')
+                cy.wait(300)
                 cy.get('tbody tr').if().then(() => {
                     cy.get('td.description + td').each(name => {
                         expect(name.text().trim()).to.equal(responsavelText)
@@ -75,15 +79,32 @@ describe('Suit Test Departamentos - Pesquisar', () => {
     })
 
     it('CT003- Um ou mais filtros', () => {
-        const arrow = cy.get('div.ng-select-container:first').find('span:first')
-        arrow.click()
-        cy.get('div.ng-option:nth(6)').click()
-        cy.get('div.ng-option:nth(12)').click()
-        arrow.click()
-        cy.get('button.primary').click()
-        cy.wait(1000)
-        cy.get('td.description + td').each(responsible => {
-            expect(responsible.text().trim()).to.be.oneOf(['Marcos Juan Thiago Cardoso', 'Conjunto Conjunto Residencial 47A'])
+        cy.wait('@select').then(({ response }) => {
+            for (let i = 0; i < response.body.length; i++) {
+                const arrow = cy.get('#responsavel > .custom > .ng-select-container > .ng-arrow-wrapper')
+                arrow.click()
+                const options = []
+                const random1 = Math.floor(Math.random() * response.body.length)
+                let random2 = Math.floor(Math.random() * response.body.length)
+
+                while (random1 == random2) {
+                    random2 = Math.floor(Math.random() * response.body.length)
+                }
+                const option1 = cy.get(`div.ng-option:nth(${random1})`)
+                const option2 = cy.get(`div.ng-option:nth(${random2})`)
+                option1.click()
+                option2.click()
+                option1.invoke('text').then(val => options.push(val.toString()))
+                option2.invoke('text').then(val => options.push(val.toString()))
+                arrow.click()
+                cy.get('button.primary').click()
+                cy.wait('@pesquisa')
+                cy.wait(1000)
+                cy.get('td.description.text-start + td').if().each(responsible => {
+                    expect(responsible.text().trim()).to.be.oneOf(options)
+                })
+                cy.get('header > :nth-child(2) > span').click()
+            }
         })
     })
 
@@ -91,6 +112,7 @@ describe('Suit Test Departamentos - Pesquisar', () => {
         const states = ['Ativo', 'Inativo']
 
         for (let i = 0; i < states.length; i++) {
+            cy.intercept('/departamento/search*').as('pesquisa')
             cy.get('header > :nth-child(2) > span').click()
             const arrow = cy.get('div.ng-select-container:nth(1)').find('span:first')
             arrow.click()
@@ -102,7 +124,8 @@ describe('Suit Test Departamentos - Pesquisar', () => {
                 cy.get('div.item-multiselect').should('be.visible').and('contain.text', text)
             })
             cy.get('button.primary').click()
-            cy.wait(1500)
+            cy.wait('@pesquisa')
+            cy.wait(300)
             cy.get('tbody tr > td:nth(3)').each(td => {
                 expect(td.text().trim()).to.equal(states[i])
             })
@@ -113,7 +136,6 @@ describe('Suit Test Departamentos - Pesquisar', () => {
         const page1 = []
         cy.get('td.description').each(id => page1.push(id.text()))
         cy.get('.ci-chevron_right').click()
-        cy.wait(1000)
         cy.get('td.description').each(id => {
             expect(page1.includes(id)).to.be.false
         })

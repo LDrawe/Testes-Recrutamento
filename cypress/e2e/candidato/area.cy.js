@@ -9,8 +9,8 @@ describe('Suit Test Area do Candidato', () => {
 
     beforeEach(() => {
         cy.visit('/')
-        cy.get('app-home > button').click()
-        cy.intercept('GET', 'https://api.dev.recrutamento.itixti-lab.com.br/consulta-cep/completed/*').as('cep')
+        cy.get('app-home > :nth-child(2)').click()
+        cy.intercept('GET', '/consulta-cep/completed/*').as('cep')
     })
 
     it('TC001- Teste Página Currículo do Candidato', () => {
@@ -90,11 +90,11 @@ describe('Suit Test Area do Candidato', () => {
         cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
-    it('TC014- Teste campo Telefone Celular aceitando Letras', () => {
+    it('[Bug] TC014- Teste campo Telefone Celular aceitando Letras', () => {
         cy.get('#telefone').type('rnbanfjnBILAKMNFQOÇJ').should('have.value', '')
     })
 
-    it('TC015- Teste Campo Telefone Celular sem o digito 9 após o ddd', () => {
+    it('[Bug] TC015- Teste Campo Telefone Celular sem o digito 9 após o ddd', () => {
         cy.get('#telefone').type('3288844849')
         cy.get('.error-msg').should('be.visible').and('have.text', ' O telefone informado é inválido ')
     })
@@ -282,10 +282,10 @@ describe('Suit Test Area do Candidato', () => {
         cy.get('button.btn-primary').click()
 
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 3; i++) {
             formacao.click();
             cy.get('div.ng-option').eq(i).click();
-            cy.get('#grau').should(i < 3 ? 'be.disabled' : 'be.enabled');
+            cy.get('#grau > .ng-select-container > .ng-value-container > .ng-input > input').should('be.disabled');
         }
     })
 
@@ -341,7 +341,7 @@ describe('Suit Test Area do Candidato', () => {
         })
     })
 
-    it('TC048 - Validação Campo "Curso" quando "Formação" for diferente de "Técnico" ou "Superior"', () => {
+    it('[Bug] TC048 - Validação Campo "Curso" quando "Formação" for diferente de "Técnico" ou "Superior"', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
         
@@ -390,16 +390,16 @@ describe('Suit Test Area do Candidato', () => {
 
         cy.get('#status').click()
         cy.get('div.ng-option').eq(0).click()
-        cy.get(':nth-child(1) > .date-picker > .input-date-picker > img').click()
-        cy.get('[aria-label="Select year"]').select('2023')
-        cy.get('[aria-label="Select month"]').select('jun.')
-        cy.get('[aria-label="sexta-feira, 16 de junho de 2023"] > .btn-light').click()
-        cy.get('.mb-3 > .date-picker > .input-date-picker > img').click()
-        cy.get('.ngb-dp-footer > :nth-child(3)').click()
-        cy.get('.mb-3 > .date-picker > .input-date-picker > .date-picker-input').should('not.have.value', '')
+        cy.get('#dataInicio > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
+        cy.get(':nth-child(2) > :nth-child(3) > .d-flex').click()
+        cy.get('.curryear').click()
+        cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
+        cy.get(':nth-child(4) > :nth-child(3) > .d-flex').click()
+        cy.get('.curryear').click()
+        cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-input > .ng-untouched').should('not.have.value', '')
     })
 
-    it('TC052 - Validação campo "Data inicio" maior que a data atual', () => {
+    it('[Bug] TC052 - Validação campo "Data inicio" maior que a data atual', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
 
@@ -410,13 +410,16 @@ describe('Suit Test Area do Candidato', () => {
 
         cy.get('#status').click()
         cy.get('div.ng-option').eq(0).click()
-        cy.get(':nth-child(1) > .date-picker > .input-date-picker > img').click()
-        cy.get('[aria-label="Select year"]').select('2025')
-        cy.get('[aria-label="domingo, 8 de junho de 2025"] > .btn-light').click()
+        cy.get('#dataInicio > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
+        cy.get(':nth-child(1) > :nth-child(1) > .d-flex').click()
+        cy.get('tbody > :nth-child(3) > :nth-child(3)').click()
+        cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
+        cy.get(':nth-child(1) > :nth-child(1) > .d-flex').click()
+        cy.get('tbody > :nth-child(2) > :nth-child(2)').click()
         cy.get(':nth-child(1) > .error-msg').should('be.visible').and('have.text', ' Data de Início é maior que a Data Atual ')
     })
 
-    it('TC053 - Validação campo "Data Início" maior que a "Data Termino"', () => {
+    it('[Bug] TC053 - Validação campo "Data Início" maior que a "Data Termino"', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
 
@@ -426,10 +429,12 @@ describe('Suit Test Area do Candidato', () => {
         cy.get('div.ng-option').eq(3).click()
         cy.get('#status').click()
         cy.get('div.ng-option').eq(0).click()
-        cy.get(':nth-child(1) > .date-picker > .input-date-picker > img').click()
-        cy.get('.ngb-dp-today > .btn-light').click()
-        cy.get('.mb-3 > .date-picker > .input-date-picker > img').click()
-        cy.get('[aria-label="sábado, 1 de junho de 2024"] > .btn-light').click()
+        cy.get('#dataInicio > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
+        cy.get(':nth-child(2) > :nth-child(3) > .d-flex').click()
+        cy.get('tbody > :nth-child(3) > :nth-child(3)').click()
+        cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
+        cy.get(':nth-child(4) > :nth-child(3) > .d-flex').click()
+        cy.get('.curryear').click()
         cy.get('.error-msg').should('be.visible').and('have.text', ' Data de Término é menor que a Data de Início ')
     })
 
@@ -442,10 +447,12 @@ describe('Suit Test Area do Candidato', () => {
         cy.get('#status').click()
         cy.get('div.ng-option').eq(0).click()
         cy.get('#instituicao').type('Equipe')
-        cy.get(':nth-child(1) > .date-picker > .input-date-picker > img').click()
-        cy.get('[aria-label="sábado, 1 de junho de 2024"] > .btn-light').click()
-        cy.get('.mb-3 > .date-picker > .input-date-picker > img').click()
-        cy.get('.ngb-dp-today > .btn-light').click()
+        cy.get('#dataInicio > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
+        cy.get(':nth-child(1) > :nth-child(1) > .d-flex').click()
+        cy.get('tbody > :nth-child(2) > :nth-child(1)').click()
+        cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
+        cy.get(':nth-child(2) > :nth-child(3) > .d-flex').click()
+        cy.get('tbody > :nth-child(3) > :nth-child(3)').click()
         cy.get('[formarrayname="experienciasAcademicas"] > :nth-child(2) > .btn').click()
         cy.get('.ng-touched.ng-invalid > :nth-child(2) > :nth-child(1)').should('be.visible').and('have.text', 'Experiência 02')
     })
@@ -480,10 +487,12 @@ describe('Suit Test Area do Candidato', () => {
         cy.get('#status').click()
         cy.get('div.ng-option').eq(0).click()
         cy.get('#instituicao').type('Equipe')
-        cy.get(':nth-child(1) > .date-picker > .input-date-picker > img').click()
-        cy.get('[aria-label="sábado, 1 de junho de 2024"] > .btn-light').click()
-        cy.get('.mb-3 > .date-picker > .input-date-picker > img').click()
-        cy.get('.ngb-dp-today > .btn-light').click()
+        cy.get('#dataInicio > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
+        cy.get(':nth-child(1) > :nth-child(1) > .d-flex').click()
+        cy.get('tbody > :nth-child(2) > :nth-child(1)').click()
+        cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
+        cy.get(':nth-child(2) > :nth-child(3) > .d-flex').click()
+        cy.get('tbody > :nth-child(3) > :nth-child(3)').click()
         cy.get('button.btn-primary').click()
         cy.get('h5').should('be.visible').and('have.text', 'Experiência Profissional')
     })

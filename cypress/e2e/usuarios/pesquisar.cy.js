@@ -8,7 +8,6 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
         cy.getCookies().should('be.empty')
         cy.intercept('GET', '/cargo/find-all-select').as('fetchCargo')
         cy.intercept('GET', '/departamento/find-all-select').as('fetchDepartamento')
-        cy.intercept('GET', '/perfil/find-all-select').as('fetchPerfil')
     })
 
     beforeEach(() => {
@@ -102,9 +101,9 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
         });
     })
 
-    it.only('CT010- Teste Pesquisar ', () => {
+    it('CT010- Teste Pesquisar ', () => {
+        cy.wait(['@fetchCargo', '@fetchDepartamento'])
         let optionText = ''
-        cy.wait(['@fetchCargo', '@fetchDepartamento', '@fetchPerfil'])
         cy.get('span.ng-arrow-wrapper').each((arrow, categoryIndex) => {
             cy.wrap(arrow).click()
             cy.get('div.ng-option').then(({ length }) => {
@@ -118,7 +117,7 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
                     cy.wrap(arrow).click()
                     cy.get('button.btn-primary').click()
                     cy.wait('@filter')
-                    cy.wait(500)
+                    cy.wait(800)
                     cy.get('tbody tr').if().each(row => {
                         cy.wrap(row).find(`td:nth(${categoryIndex + 1})`).each(name => {
                             cy.wrap(name).should('have.text', optionText)

@@ -11,11 +11,11 @@ describe('Suit Test Candidato - Cadastrar', () => {
     beforeEach(() => {
         cy.visit('/')
         cy.title().should('contain', 'Recrutamento')
-        cy.get('li > div.wrapper').eq(1).click()
+        cy.get('.ci-group').click()
         cy.contains('ul.sub-menu > li:nth-child(1)', 'Candidatos').click()
-        cy.get('a').click()
-        cy.url().should('contain', '/banco-de-talentos/candidatos')
-        cy.intercept('https://api.dev.recrutamento.itixti-lab.com.br/consulta-cep/completed/29500000').as('cep')
+        cy.get('.justify-content-end > :nth-child(2)').click()
+        cy.url().should('contain', '/banco-de-talentos/candidatos/form')
+        cy.intercept('/consulta-cep/completed/29500000').as('cep')
     })
 
     it('TC001 - Verificar Pagina de adicionar Candidato', () => {
@@ -124,7 +124,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('.error-msg').should('be.visible').and('have.text', ' CPF inválido ')
     })
 
-    it('TC015 - Validação Área de Trabalho máximo de caracteres', () => {
+    it('[Bug] TC015 - Validação Área de Trabalho máximo de caracteres', () => {
         cy.get('input[placeholder="Informe a área de trabalho"]').type(randomBytes(60).toString('hex')).blur()
         cy.get('.error-msg').should('be.visible').and('have.text', ' Campo excedeu o tamanho limite de caracteres ')
     })
@@ -303,7 +303,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
         })
     })
 
-    it('TC041 - Validação Campo "Curso" vazio', () => {
+    it('[Bug] TC041 - Validação Campo "Curso" vazio', () => {
         cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
@@ -339,7 +339,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('#curso').should('be.enabled')
     })
 
-    it('TC044 - Validação Campo "Grau de Escolaridade" quando o campo "Formação" for diferente de "Superior"', () => {
+    it('[Bug] TC044 - Validação Campo "Grau de Escolaridade" quando o campo "Formação" for diferente de "Superior"', () => {
         cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
@@ -504,7 +504,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
-    it('TC059 - Validação campo "Empresa" mais de 256 caracteres', () => {
+    it('[Bug] TC059 - Validação campo "Empresa" mais de 256 caracteres', () => {
         cy.fillCandidatoForm()
         cy.get('#empresa').type(randomBytes(130).toString('hex'))
         cy.get('div.error-msg').should('be.visible').and('have.text', ' Campo excedeu o tamanho limite de caracteres ')
@@ -616,11 +616,11 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('div.swal2-container').should('not.exist')
     })
 
-    it.skip('TC072 - Teste Botão "Voltar"  Experiência profissional.', () => {
+    it('TC072 - Teste Botão "Voltar"  Experiência profissional.', () => {
         cy.fillCandidatoForm()
         cy.get('.justify-content-between > .col-3 > .btn').click()
         cy.get('p.title-section').should('be.visible').and('have.text', 'Experiência Acadêmica')
-        cy.get('input.ng-pristine').each(campo => {
+        cy.get('input.ng-pristine:not([id="curso"])').each(campo => {
             cy.wrap(campo).should('not.have.value', '')
         })
     })

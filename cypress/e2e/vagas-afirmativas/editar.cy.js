@@ -1,4 +1,5 @@
 /// <reference types="Cypress" />
+import 'cypress-if'
 import { randomBytes } from 'crypto'
 
 describe('Suit Test Vagas Afirmativas - Pesquisar e Editar (US 61449)', () => {
@@ -11,28 +12,24 @@ describe('Suit Test Vagas Afirmativas - Pesquisar e Editar (US 61449)', () => {
         cy.visit('/')
         cy.title().should('contain', 'Recrutamento')
         cy.get('li > div.wrapper').eq(2).click()
-        cy.get('.sub-menu > :nth-child(16)').click()
+        cy.get('.sub-menu > :nth-child(15)').click()
+        cy.intercept('vaga-afirmativa/search*').as('vagas')
         cy.url().should('contain', 'setup-da-empresa/vagas-afirmativas')
     })
 
     it('CT001 - Exibir vagas', () => {
-        const rows = cy.get('tbody tr')
-        rows.should('have.length.at.most', 10)
-        rows.then(({length}) => {
-            if (length === 0) {
-                cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
-            }
+        cy.wait('@vagas')
+        cy.get('h5').if().should('be.visible').and('have.text', 'Nenhum resultado encontrado').else().then(() => {
+            cy.get('tbody tr').should('have.length.at.most', 10)
         })
-
-        rows.each(row => {
-            expect(row['0'].children[0].textContent).to.have.length.greaterThan(0)
-            expect(row['0'].children[1].textContent.trim().toLowerCase()).to.include('ativo')
-            expect(row['0'].children[2].textContent).to.equal('Editar')
+        cy.get('.description').each(name => cy.wrap(name).should('not.have.text', ''))
+        cy.get('.description + td').each(status => {
+            expect(status.text().toString().trim().toLocaleLowerCase()).to.include('ativo')
         })
     })
 
-    it('CT002 - Editar Vaga', () => {
-        cy.get(':nth-child(1) > .rounded-end > .text-gray').click()
+    it('[Bug] CT002 - Editar Vaga', () => {
+        cy.get(':nth-child(1) > .rounded-end > .edit').click()
         cy.get('#vagaInput').should('be.visible').and('be.enabled').and('have.attr', 'maxlength', 100)
         cy.get('#check').should('be.visible').and('be.enabled')
         cy.get('.btn-text').should('be.visible').and('be.enabled').and('have.text', 'Voltar')
@@ -40,14 +37,14 @@ describe('Suit Test Vagas Afirmativas - Pesquisar e Editar (US 61449)', () => {
     })
 
     it('CT003 - Removendo descrição da Vaga', () => {
-        cy.get(':nth-child(1) > .rounded-end > .text-gray').click()
+        cy.get(':nth-child(1) > .rounded-end > .edit').click()
         cy.get('#vagaInput').clear().blur()
         cy.get('.btn-primary').should('be.visible').and('not.be.enabled')
         cy.get(':nth-child(3) > .text-danger').should('be.visible').and('have.text', 'O campo Vaga Afirmativa não pode estar vazio!')
     })
 
     it('CT004 - Editando descriçao da vaga', () => {
-        cy.get(':nth-child(1) > .rounded-end > .text-gray').click()
+        cy.get(':nth-child(1) > .rounded-end > .edit').click()
         cy.get('#vagaInput').clear().type('Teste')
         cy.get('.btn-text').click()
         cy.get('.swal2-popup').should('be.visible')
@@ -62,14 +59,14 @@ describe('Suit Test Vagas Afirmativas - Pesquisar e Editar (US 61449)', () => {
     })
 
     it('CT005 - Editar Vaga (Nome repetido)', () => {
-        cy.get(':nth-child(1) > .rounded-end > .text-gray').click()
+        cy.get(':nth-child(1) > .rounded-end > .edit').click()
         cy.get('#vagaInput').clear().type('Teste')
         cy.get('.btn-primary').click()
         cy.get('span.text-danger').should('be.visible').and('have.text', '**Já existe um registro com essa descrição')
     })
 
     it('CT006 - Editar Vaga (Nome novo)', () => {
-        cy.get(':nth-child(1) > .rounded-end > .text-gray').click()
+        cy.get(':nth-child(1) > .rounded-end > .edit').click()
         cy.get('#vagaInput').clear().type(randomBytes(6).toString('hex'))
         cy.get('.btn-primary').click()
         cy.get('#swal2-title').should('be.visible').and('have.text', 'Sucesso')
