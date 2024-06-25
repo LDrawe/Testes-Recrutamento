@@ -6,8 +6,8 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
     before(() => {
         cy.clearCookies()
         cy.getCookies().should('be.empty')
-        cy.intercept('GET', '/cargo/find-all-select').as('fetchCargo')
-        cy.intercept('GET', '/departamento/find-all-select').as('fetchDepartamento')
+        cy.intercept('GET', '/cargo/multiselect-cargos').as('fetchCargo')
+        cy.intercept('GET', '/departamento/multiselect-departamentos').as('fetchDepartamento')
     })
 
     beforeEach(() => {

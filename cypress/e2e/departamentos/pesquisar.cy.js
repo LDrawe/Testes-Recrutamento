@@ -11,7 +11,7 @@ describe('Suit Test Departamentos - Pesquisar', () => {
         cy.visit('/')
         cy.title().should('contain', 'Recrutamento')
         cy.intercept('/departamento/search*').as('pesquisa')
-        cy.intercept('/usuario/find-all-select').as('select')
+        cy.intercept('/usuario/multiselect-usuarios').as('select')
         cy.get('li > div.wrapper').eq(2).click()
         cy.contains('ul.sub-menu > li:nth-child(4)', 'Departamentos').click()
         cy.url().should('contain', 'setup-da-empresa/departamentos')

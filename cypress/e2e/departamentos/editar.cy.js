@@ -57,7 +57,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
 
     it('CT004 - Remover dados', () => {
         cy.intercept('GET', '/departamento/*').as('departamento')
-        cy.intercept('GET', '/usuario/usuario-email').as('email')
+        cy.intercept('GET', '/usuario/multiselect-usuarios-email').as('email')
         cy.get('tbody tr').eq(5).click()
         cy.get('button.primary').click()
         cy.wait(['@departamento', '@email'])
