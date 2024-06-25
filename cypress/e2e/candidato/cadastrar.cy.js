@@ -56,7 +56,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     it('TC003 - Validação botão remover imagem', () => {
         cy.get('#profile-image-input').selectFile('./cypress/downloads/200.png', { force: true })
         cy.get('.clear-profile-icon').click().should('not.exist')
-        cy.get('img.rounded-circle').should('have.attr', 'src', 'assets/images/User_03.png')
+        cy.get('img.rounded-circle').should('have.attr', 'src', 'assets/images/user-03.png')
     })
 
     it('TC004 - Validação Campo Nome vazio', () => {
