@@ -80,6 +80,7 @@ describe('Suit Test Area do Candidato', () => {
 
     it('TC012- Teste campo Data de Nascimento data futura', () => {
         cy.get('.input-date-picker > img').click()
+        cy.get('[aria-label="Select month"]').select('jun.')
         cy.get('[aria-label="Select year"]').select('2025')
         cy.get('[aria-label="domingo, 8 de junho de 2025"] > .btn-light').click()
         cy.get('.error-msg').should('be.visible').and('have.text', ' A data de nascimento informada é inválida ')

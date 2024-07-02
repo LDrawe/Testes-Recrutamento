@@ -54,6 +54,8 @@ Cypress.Commands.add('fillCandidatoForm', (continuar = true) => {
         cy.get('div.ng-option').eq(0).click()
         cy.get('#instituicao').type('Equipe')
         cy.get('#dataInicio > .input-date-picker > img').click()
+        cy.get('[aria-label="Select month"]').select('jun.')
+        cy.get('[aria-label="Select year"]').select('2024')
         cy.get('[aria-label="sábado, 1 de junho de 2024"] > .btn-light').click()
         cy.get('#dataTermino > .input-date-picker > img').click()
         cy.get('.ngb-dp-today > .btn-light').click()

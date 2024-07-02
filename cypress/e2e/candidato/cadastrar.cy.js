@@ -339,7 +339,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('#curso').should('be.enabled')
     })
 
-    it('[Bug] TC044 - Validação Campo "Grau de Escolaridade" quando o campo "Formação" for diferente de "Superior"', () => {
+    it('TC044 - Validação Campo "Grau de Escolaridade" quando o campo "Formação" for "Superior"', () => {
         cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
@@ -451,6 +451,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('#status').click()
         cy.get('div.ng-option').eq(0).click()
         cy.get('#dataInicio > .input-date-picker > img').click()
+        cy.get('[aria-label="Select month"]').select('jun.')
         cy.get('[aria-label="Select year"]').select('2025')
         cy.get('[aria-label="domingo, 8 de junho de 2025"] > .btn-light').click()
         cy.get(':nth-child(1) > .error-msg').should('be.visible').and('have.text', ' Data de Início é maior que a Data Atual ')
@@ -467,6 +468,8 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('#dataInicio > .input-date-picker > img').click()
         cy.get('.ngb-dp-today > .btn-light').click()
         cy.get('#dataTermino > .input-date-picker > img').click()
+        cy.get('[aria-label="Select month"]').select('jun.')
+        cy.get('[aria-label="Select year"]').select('2024')
         cy.get('[aria-label="sábado, 1 de junho de 2024"] > .btn-light').click()
         cy.get('.error-msg').should('be.visible').and('have.text', ' Data de Término é menor que a Data de Início ')
     })
@@ -479,6 +482,8 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('div.ng-option').eq(0).click()
         cy.get('#instituicao').type('Equipe')
         cy.get('#dataInicio > .input-date-picker > img').click()
+        cy.get('[aria-label="Select month"]').select('jun.')
+        cy.get('[aria-label="Select year"]').select('2024')
         cy.get('[aria-label="sábado, 1 de junho de 2024"] > .btn-light').click()
         cy.get('#dataTermino > .input-date-picker > img').click()
         cy.get('.ngb-dp-today > .btn-light').click()
@@ -543,6 +548,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     it('TC065 - Validação campo "Data Início" maior que a data atual', () => {
         cy.fillCandidatoForm()
         cy.get('#dataInicio > .input-date-picker > img').click()
+        cy.get('[aria-label="Select month"]').select('jun.')
         cy.get('[aria-label="Select year"]').select('2025')
         cy.get('[aria-label="domingo, 8 de junho de 2025"] > .btn-light').click()
         cy.get(':nth-child(1) > .error-msg').should('be.visible').and('have.text', ' Data de Início é maior que a Data Atual ')
@@ -553,6 +559,8 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('#dataInicio > .input-date-picker > img').click()
         cy.get('.ngb-dp-today > .btn-light').click()
         cy.get('#dataTermino > .input-date-picker > img').click()
+        cy.get('[aria-label="Select month"]').select('jun.')
+        cy.get('[aria-label="Select year"]').select('2024')
         cy.get('[aria-label="sábado, 1 de junho de 2024"] > .btn-light').click()
         cy.get('.error-msg').should('be.visible').and('have.text', ' Data de Término é menor que a Data de Início ')
     })
