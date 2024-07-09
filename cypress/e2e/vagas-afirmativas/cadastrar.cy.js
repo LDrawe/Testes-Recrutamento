@@ -2,42 +2,35 @@
 import { randomBytes } from 'crypto'
 
 describe('Suit Test Vagas Afirmativas - Cadastrar (US 60648)', () => {
-    before(() => {
-        cy.clearCookies()
-        cy.getCookies().should('be.empty')
-    })
-
     beforeEach(() => {
-        cy.visit('/')
-        cy.title().should('contain', 'Recrutamento')
-        cy.get('li > div.wrapper').eq(2).click()
-        cy.get('.sub-menu > :nth-child(15)').click()
+        cy.authenticate()
+        cy.visit('/setup-da-empresa/vagas-afirmativas', { failOnStatusCode: false })
         cy.url().should('contain', 'setup-da-empresa/vagas-afirmativas')
     })
 
     it('CT001 - Adicionar', () => {
         cy.get('button.secondary').should('be.visible').and('be.enabled').click()
         cy.url().should('contain', 'setup-da-empresa/vagas-afirmativas/form')
-        cy.get('input.inpunt-register').should('be.visible').and('be.enabled')
+        cy.get('.input-register').should('be.visible').and('be.enabled')
         cy.get('button.btn-secondary').should('be.visible').and('be.enabled')
         cy.get('button.btn-primary').should('be.visible').and('be.disabled')
     })
 
     it('CT002 - Botão Salvar', () => {
         cy.get('button.secondary').click()
-        cy.get('input.inpunt-register').type('Teste')
+        cy.get('.input-register').type('Teste')
         cy.get('button.btn-primary').should('be.enabled')
     })
 
     it('CT003 - Salvar sem dados', () => {
         cy.get('button.secondary').click()
-        cy.get('input.inpunt-register').focus().blur()
+        cy.get('.input-register').focus().blur()
         cy.get('.form-group > span').should('be.visible').and('include.text', '*Campo de preenchimento obrigatório')
     })
 
     it('CT004 - Duplicidade de vagas', () => {
         cy.get('button.secondary').should('be.visible').and('be.enabled').click()
-        cy.get('input.inpunt-register').type('Teste')
+        cy.get('.input-register').type('Teste')
         cy.get('button.btn-primary').click()
         cy.get('h2#swal2-title').should('be.visible').and('have.text', 'Registro já existe!')
         cy.get('div#swal2-html-container').should('be.visible').and('have.text', 'Já existe registro com essa descrição')
@@ -47,7 +40,7 @@ describe('Suit Test Vagas Afirmativas - Cadastrar (US 60648)', () => {
 
     it('CT005 - Salvar com sucesso', () => {
         cy.get('button.secondary').should('be.visible').and('be.enabled').click()
-        cy.get('input.inpunt-register').type(randomBytes(4).toString('hex'))
+        cy.get('.input-register').type(randomBytes(4).toString('hex'))
         cy.get('button.btn-primary').click()
         cy.get('h2#swal2-title').should('be.visible').and('have.text', 'Sucesso')
         cy.get('div#swal2-html-container').should('be.visible').and('have.text', 'Registro salvo com sucesso')
@@ -57,7 +50,7 @@ describe('Suit Test Vagas Afirmativas - Cadastrar (US 60648)', () => {
 
     it('CT006 - Sair sem salvar', () => {
         cy.get('button.secondary').should('be.visible').and('be.enabled').click()
-        cy.get('input.inpunt-register').type('Teste')
+        cy.get('.input-register').type('Teste')
         const voltar = cy.get('button.btn-secondary')
         voltar.click()
         cy.get('h2#swal2-title').should('be.visible').and('have.text', 'Atenção')

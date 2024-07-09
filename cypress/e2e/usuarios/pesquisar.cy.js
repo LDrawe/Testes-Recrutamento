@@ -3,18 +3,9 @@ import 'cypress-if'
 import { randomBytes } from 'crypto'
 
 describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
-    before(() => {
-        cy.clearCookies()
-        cy.getCookies().should('be.empty')
-        cy.intercept('GET', '/cargo/multiselect-cargos').as('fetchCargo')
-        cy.intercept('GET', '/departamento/multiselect-departamentos').as('fetchDepartamento')
-    })
-
     beforeEach(() => {
-        cy.visit('/')
-        cy.title().should('contain', 'Recrutamento')
-        cy.get('li > div.wrapper').eq(3).click()
-        cy.contains('ul.sub-menu > li:nth-child(3)', 'Usuários').click()
+        cy.authenticate()
+        cy.visit('/administracao/usuarios', { failOnStatusCode: false })
         cy.url().should('contain', 'administracao/usuarios')
     })
 
@@ -102,6 +93,8 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
     })
 
     it('CT010- Teste Pesquisar ', () => {
+        cy.intercept('GET', '/cargo/multiselect-cargos').as('fetchCargo')
+        cy.intercept('GET', '/departamento/multiselect-departamentos').as('fetchDepartamento')
         cy.wait(['@fetchCargo', '@fetchDepartamento'])
         let optionText = ''
         cy.get('span.ng-arrow-wrapper').each((arrow, categoryIndex) => {

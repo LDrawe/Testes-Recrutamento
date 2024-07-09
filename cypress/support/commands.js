@@ -1,31 +1,21 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add('trim', selector =>
     cy.get(selector).invoke('text').then(text => text.replace('kr', '').replace('\xa0', '').trim())
 )
+
+Cypress.Commands.add('authenticate', () => {
+    cy.session([Cypress.env('EMAIL'), Cypress.env('PASSWORD')], () => {
+        cy.visit('/')
+        cy.get('.btn-login').click()
+        cy.intercept('POST', '/auth/token').as('token')
+        cy.get('#email').type(Cypress.env('EMAIL'))
+        cy.get('#password').type(Cypress.env('PASSWORD'))
+        cy.get('button.btn-primary').click()
+        cy.wait('@token').then(({ response: { body } }) => {
+            for (const key in body) localStorage.setItem(key, body[key])
+        })
+    }, { cacheAcrossSpecs: true })
+})
+
 
 Cypress.Commands.add('fillCandidatoForm', (continuar = true) => {
     cy.get('span.h1').click()

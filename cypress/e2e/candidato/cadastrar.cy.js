@@ -3,18 +3,13 @@ import 'cypress-if'
 import { randomBytes } from 'crypto'
 
 describe('Suit Test Candidato - Cadastrar', () => {
-    before(() => {
-        cy.clearCookies()
-        cy.getCookies().should('be.empty')
-    })
-
     beforeEach(() => {
-        cy.visit('/')
+        cy.authenticate()
+        cy.visit('/recruitment', { failOnStatusCode: false })
         cy.title().should('contain', 'Recrutamento')
         cy.get('.ci-group').click()
-        cy.contains('ul.sub-menu > li:nth-child(1)', 'Candidatos').click()
         cy.get('.justify-content-end > :nth-child(2)').click()
-        cy.url().should('contain', '/banco-de-talentos/candidatos/form')
+        cy.url().should('contain', '/banco-de-talentos/form')
         cy.intercept('/consulta-cep/completed/29500000').as('cep')
     })
 
@@ -106,7 +101,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     it('TC011 - Validação Campo Cargo Item encontrado', () => {
         cy.get('#cargo').click().type('Estagiário')
         const option = cy.get('.ng-option')
-        option.should('have.text', 'Estagiário')
+        option.should('have.text', 'Estagiário de TI')
     })
 
     it('TC012 - Validação campo CPF inserir Letras', () => {

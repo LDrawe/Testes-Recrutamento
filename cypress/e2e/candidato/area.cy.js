@@ -2,14 +2,9 @@
 import { randomBytes } from 'crypto'
 
 describe('Suit Test Area do Candidato', () => {
-    before(() => {
-        cy.clearCookies()
-        cy.getCookies().should('be.empty')
-    })
-
     beforeEach(() => {
-        cy.visit('/')
-        cy.get('app-home > :nth-child(2)').click()
+        cy.authenticate()
+        cy.visit('/area-candidato/curriculo/form', { failOnStatusCode: false })
         cy.intercept('GET', '/consulta-cep/completed/*').as('cep')
     })
 
@@ -293,7 +288,7 @@ describe('Suit Test Area do Candidato', () => {
     it('TC043 - Validação Campo "Grau de Escolaridade" quando o campo "Formação" for "Superior"', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
-        
+
         cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper').click()
         cy.get('div.ng-option').eq(3).click()
         cy.get('#grau > .ng-select-container > .ng-value-container > .ng-input > input').should('be.enabled').click()
@@ -345,7 +340,7 @@ describe('Suit Test Area do Candidato', () => {
     it('[Bug] TC048 - Validação Campo "Curso" quando "Formação" for diferente de "Técnico" ou "Superior"', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
-        
+
         for (let i = 0; i < 2; i++) {
             cy.get('#formacao').click()
             cy.get('div.ng-option').eq(i).click()
@@ -356,7 +351,7 @@ describe('Suit Test Area do Candidato', () => {
     it('TC049 - Validação Campo "Curso" quando "Formação" for "Técnico" ou "Superior"', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
-        
+
         for (let i = 2; i < 4; i++) {
             cy.get('#formacao').click()
             cy.get('div.ng-option').eq(i).click()
@@ -367,7 +362,7 @@ describe('Suit Test Area do Candidato', () => {
     it('TC050 - Validação Campo "Data Término" quando campo "status" for Incompleto/Em andamento.', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
-        
+
         cy.get('#formacao').click()
         cy.get('div.ng-option').eq(3).click()
         cy.get('#grau').click()
@@ -383,7 +378,7 @@ describe('Suit Test Area do Candidato', () => {
     it('TC051 - Validação Campo "Data Término" quando campo "status" for Concluído', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
-        
+
         cy.get('#formacao').click()
         cy.get('div.ng-option').eq(3).click()
         cy.get('#grau').click()

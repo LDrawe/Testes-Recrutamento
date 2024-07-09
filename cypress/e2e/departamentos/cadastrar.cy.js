@@ -2,16 +2,9 @@
 import { randomBytes } from 'crypto'
 
 describe('Suit Test Departamentos - Cadastrar (US 60625)', () => {
-    before(() => {
-        cy.clearCookies()
-        cy.getCookies().should('be.empty')
-    })
-
     beforeEach(() => {
-        cy.visit('/')
-        cy.title().should('contain', 'Recrutamento')
-        cy.get('li > div.wrapper').eq(2).click()
-        cy.contains('ul.sub-menu > li:nth-child(4)', 'Departamentos').click()
+        cy.authenticate()
+        cy.visit('/setup-da-empresa/departamentos', { failOnStatusCode: false })
         cy.url().should('contain', 'setup-da-empresa/departamentos')
     })
 

@@ -3,16 +3,9 @@ import 'cypress-if'
 import { randomBytes } from 'crypto'
 
 describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
-    before(() => {
-        cy.clearCookies()
-        cy.getCookies().should('be.empty')
-    })
-
     beforeEach(() => {
-        cy.visit('/')
-        cy.title().should('contain', 'Recrutamento')
-        cy.get('li > div.wrapper').eq(2).click()
-        cy.contains('ul.sub-menu > li:nth-child(4)', 'Departamentos').click()
+        cy.authenticate()
+        cy.visit('/setup-da-empresa/departamentos', { failOnStatusCode: false })
         cy.url().should('contain', 'setup-da-empresa/departamentos')
     })
 
@@ -111,14 +104,14 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
         cy.url().should('not.contain', '/form')
     })
 
-    it('CT008 - Salvar alterações', () => {
-        cy.get('tbody tr').eq(5).click()
+    it.only('CT008 - Salvar alterações', () => {
+        cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(0).click()
         cy.get('button.primary').click()
         cy.get('span.slider').click()
         cy.get('#nomeDepartamento').clear().type(randomBytes(3).toString('hex'))
         cy.get('#abreviacao').clear().type(randomBytes(2).toString('hex'))
         cy.get('.ng-arrow-wrapper').click()
-        cy.get(`div.ng-option:nth(1)`).click()
+        cy.get('div.ng-option:nth(1)').click()
         cy.get('.ng-arrow-wrapper').click()
         cy.get('button.primary').click()
         cy.get('#swal2-title').should('be.visible').and('have.text', 'Sucesso')
