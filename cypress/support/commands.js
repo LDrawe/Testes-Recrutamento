@@ -65,7 +65,14 @@ Cypress.Commands.add('fillCurriculumForm', (continuar = true, cep = '18304735') 
 
     if (continuar) {
         cy.get('#cep').type(cep)
-        cy.wait('@cep')
+        cy.wait('@cep').then(({ response }) => {
+            if (response.statusCode == 200) return
+
+            cy.get('#bairro').type('Centro')
+            cy.get('#cidade').type('Alegre')
+            cy.get('#estado').type('ES')
+            cy.get('#pais').type('Brasil')
+        })
         cy.get('#numero').type('1')
         cy.get('#complemento').type('Apt 42')
         cy.get('#referencia').type('Subindo o morro')
