@@ -10,9 +10,7 @@ Cypress.Commands.add('authenticate', () => {
         cy.get('#email').type(Cypress.env('EMAIL'))
         cy.get('#password').type(Cypress.env('PASSWORD'))
         cy.get('button.btn-primary').click()
-        cy.wait('@token').then(({ response: { body } }) => {
-            for (const key in body) localStorage.setItem(key, body[key])
-        })
+        cy.wait('@token')
     }, { cacheAcrossSpecs: true })
 })
 
@@ -53,7 +51,7 @@ Cypress.Commands.add('fillCandidatoForm', (continuar = true) => {
     }
 })
 
-Cypress.Commands.add('fillCurriculumForm', (continuar = true, cep = '18304735') => {
+Cypress.Commands.add('fillCurriculumForm', (continuar = true, cep = '69103492') => {
     cy.get('#nome').type('Teste')
     cy.get('#sobrenome').type('Sobreteste')
     cy.get('#email').type('teste@gmail.com')
@@ -65,14 +63,7 @@ Cypress.Commands.add('fillCurriculumForm', (continuar = true, cep = '18304735') 
 
     if (continuar) {
         cy.get('#cep').type(cep)
-        cy.wait('@cep').then(({ response }) => {
-            if (response.statusCode == 200) return
-
-            cy.get('#bairro').type('Centro')
-            cy.get('#cidade').type('Alegre')
-            cy.get('#estado').type('ES')
-            cy.get('#pais').type('Brasil')
-        })
+        cy.wait('@cep')
         cy.get('#numero').type('1')
         cy.get('#complemento').type('Apt 42')
         cy.get('#referencia').type('Subindo o morro')

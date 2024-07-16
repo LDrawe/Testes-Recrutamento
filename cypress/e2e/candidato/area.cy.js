@@ -5,7 +5,7 @@ describe('Suit Test Area do Candidato', () => {
     beforeEach(() => {
         cy.authenticate()
         cy.visit('/area-candidato/curriculo/form', { failOnStatusCode: false })
-        cy.intercept('GET', '/consulta-cep/completed/*').as('cep')
+        cy.intercept('GET', '/cidade-estado/consulta-cep/*').as('cep')
     })
 
     it('TC001- Teste Página Currículo do Candidato', () => {
@@ -107,14 +107,14 @@ describe('Suit Test Area do Candidato', () => {
     })
 
     it('TC018- Teste Campo Cep encontrado', () => {
-        cy.fillCurriculumForm()
+        cy.fillCurriculumForm(true)
         cy.get('#cidade').should('not.have.value', '')
         cy.get('#estado').should('not.have.value', '')
         cy.get('#pais').should('not.have.value', '')
     })
 
     it('TC019- Teste Campo Cep não encontrado', () => {
-        cy.fillCurriculumForm(true, '29500001')
+        cy.fillCurriculumForm(true, '18304735')
         cy.get('#cidade').should('have.value', '').and('be.enabled')
         cy.get('#estado').should('have.value', '').and('be.enabled')
         cy.get('#pais').should('have.value', '').and('be.enabled')

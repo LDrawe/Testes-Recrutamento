@@ -10,7 +10,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('.ci-group').click()
         cy.get('.justify-content-end > :nth-child(2)').click()
         cy.url().should('contain', '/banco-de-talentos/form')
-        cy.intercept('/consulta-cep/completed/29500000').as('cep')
+        cy.intercept('GET', '/cidade-estado/consulta-cep/*').as('cep')
     })
 
     it('TC001 - Verificar Pagina de adicionar Candidato', () => {
@@ -146,6 +146,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
 
     it('TC020 - Validação CEP Encontrado', () => {
         cy.get('#cep').type('29500000').blur()
+        cy.wait('@cep')
         cy.get('#cidade').should('have.value', 'Alegre')
         cy.get('#estado').should('have.value', 'ES')
         cy.get('#pais').should('have.value', 'Brasil')
@@ -407,14 +408,13 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('div.ng-option').eq(3).click()
         cy.get('#grauEscolaridade').click()
         cy.get('div.ng-option').eq(3).click()
+        cy.get('#dataInicio > .input-date-picker > img').click()
+        cy.get('.ngb-dp-footer > :nth-child(3)').click()
 
         for (let i = 1; i < 3; i++) {
             cy.get('#status').click()
             cy.get('div.ng-option').eq(i).click()
-            cy.get('#dataTermino > .input-date-picker > img').click()
-            cy.get('div.ngb-dp-day').should('have.class', 'disabled')
-            cy.get('.ngb-dp-footer > :nth-child(1)').click()
-            cy.get('#dataTermino > .input-date-picker > .date-picker-input').should('have.value', '')
+            cy.get('#dataTermino > .input-date-picker > .date-picker-input').should('be.disabled')
         }
     })
 
@@ -524,8 +524,8 @@ describe('Suit Test Candidato - Cadastrar', () => {
 
     it('TC062 - Validação listbox "Cargo" item encontrado', () => {
         cy.fillCandidatoForm()
-        cy.get('#cargo').click().type('Desenvolvedor')
-        cy.get('div.ng-option').should('be.visible').and('have.text', 'Desenvolvedor')
+        cy.get('#cargo').click().type('Desenvolvedor Backend')
+        cy.get('div.ng-option').should('be.visible').and('have.text', 'Desenvolvedor Backend Sênior')
     })
 
     it('TC063 - Validação campo "Descrição das Atividades" Vazio', () => {
@@ -582,7 +582,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     it('TC069 - Teste Botão "Adicionar outra Experiência"', () => {
         cy.fillCandidatoForm()
         cy.get('#empresa').type(randomBytes(30).toString('hex'))
-        cy.get('#cargo').click().type('Desenvolvedor')
+        cy.get('#cargo').click().type('Desenvolvedor Backend Sênior')
         cy.get('div.ng-option').click()
         cy.get('#descricaoAtividades').type(randomBytes(50).toString('hex'))
         cy.get('#dataInicio > .input-date-picker > img').click()
@@ -594,7 +594,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     it('TC070 - Teste Botão "Adicionar outra Experiência"', () => {
         cy.fillCandidatoForm()
         cy.get('#empresa').type(randomBytes(30).toString('hex'))
-        cy.get('#cargo').click().type('Desenvolvedor')
+        cy.get('#cargo').click().type('Desenvolvedor Backend Sênior')
         cy.get('div.ng-option').click()
         cy.get('#descricaoAtividades').type(randomBytes(50).toString('hex'))
         cy.get('#dataInicio > .input-date-picker > img').click()
@@ -607,7 +607,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
     it.skip('TC071 - Teste Botão Continuar', () => {
         cy.fillCandidatoForm()
         cy.get('#empresa').type(randomBytes(30).toString('hex'))
-        cy.get('#cargo').click().type('Desenvolvedor')
+        cy.get('#cargo').click().type('Desenvolvedor Backend')
         cy.get('div.ng-option').click()
         cy.get('#descricaoAtividades').type(randomBytes(50).toString('hex'))
         cy.get('#dataInicio > .input-date-picker > img').click()
