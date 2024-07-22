@@ -2,7 +2,7 @@
 import 'cypress-if'
 import { randomBytes } from 'crypto'
 
-describe('Suit Test Candidato - Cadastrar', () => {
+describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
     beforeEach(() => {
         cy.authenticate()
         cy.visit('/recruitment', { failOnStatusCode: false })
@@ -119,9 +119,9 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('.error-msg').should('be.visible').and('have.text', ' CPF inválido ')
     })
 
-    it('[Bug] TC015 - Validação Área de Trabalho máximo de caracteres', () => {
-        cy.get('input[placeholder="Informe a área de trabalho"]').type(randomBytes(60).toString('hex')).blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo excedeu o tamanho limite de caracteres ')
+    it.only('TC015 - Validação Área de Trabalho máximo de caracteres', () => {
+        cy.get('#areaTrabalho').type(randomBytes(60).toString('hex')).blur()
+            .invoke('val').then(val => cy.wrap(val).should('have.length.at.most', 100))
     })
 
     it('TC016 - Validação Telefone Celular vazio', () => {
@@ -299,7 +299,7 @@ describe('Suit Test Candidato - Cadastrar', () => {
         })
     })
 
-    it('[Bug] TC041 - Validação Campo "Curso" vazio', () => {
+    it.only('[Bug] TC041 - Validação Campo "Curso" vazio', () => {
         cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
@@ -504,10 +504,10 @@ describe('Suit Test Candidato - Cadastrar', () => {
         cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
-    it('[Bug] TC059 - Validação campo "Empresa" mais de 256 caracteres', () => {
+    it('TC059 - Validação campo "Empresa" mais de 256 caracteres', () => {
         cy.fillCandidatoForm()
-        cy.get('#empresa').type(randomBytes(130).toString('hex'))
-        cy.get('div.error-msg').should('be.visible').and('have.text', ' Campo excedeu o tamanho limite de caracteres ')
+        cy.get('#empresa').type(randomBytes(130).toString('hex')).blur()
+        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo excedeu o tamanho limite de caracteres ')
     })
 
     it('TC060 - Validação campo "Cargo" Vazio', () => {

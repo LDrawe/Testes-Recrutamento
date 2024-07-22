@@ -8,10 +8,10 @@ describe('Suit Test Vagas Afirmativas - Pesquisar e Editar (US 61449)', () => {
         cy.intercept('vaga-afirmativa/search*').as('vagas')
         cy.visit('/setup-da-empresa/vagas-afirmativas', { failOnStatusCode: false })
         cy.url().should('contain', 'setup-da-empresa/vagas-afirmativas')
+        cy.wait('@vagas')
     })
 
     it('CT001 - Exibir vagas', () => {
-        cy.wait('@vagas')
         cy.get('h5').if().should('be.visible').and('have.text', 'Nenhum resultado encontrado').else().then(() => {
             cy.get('tbody tr').should('have.length.at.most', 10)
         })
@@ -21,23 +21,24 @@ describe('Suit Test Vagas Afirmativas - Pesquisar e Editar (US 61449)', () => {
         })
     })
 
-    it('[Bug] CT002 - Editar Vaga', () => {
-        cy.get(':nth-child(1) > .rounded-end > .edit').click()
-        cy.get('#vagaInput').should('be.visible').and('be.enabled').and('have.attr', 'maxlength', 100)
-        cy.get('#check').should('be.visible').and('be.enabled')
+    it('CT002 - Editar Vaga', () => {
+        cy.get('tr:not(:has(td:nth-child(2) label:contains("Inativo"))) > .rounded-end > .edit').eq(0).click()
+        cy.get('#vagaInput').should('be.visible').and('be.enabled').and('have.attr', 'maxlength', 50)
+        cy.get('#check').should('be.enabled')
+        cy.get('.slider').should('be.visible')
         cy.get('.btn-text').should('be.visible').and('be.enabled').and('have.text', 'Voltar')
-        cy.get('.btn-primary').should('be.visible').and('be.enabled').and('have.text', 'Salvar')
+        cy.get('.btn-primary').should('be.visible').and('be.enabled').and('include.text', 'Salvar')
     })
 
     it('CT003 - Removendo descrição da Vaga', () => {
-        cy.get(':nth-child(1) > .rounded-end > .edit').click()
+        cy.get('tr:not(:has(td:nth-child(2) label:contains("Inativo"))) > .rounded-end > .edit').eq(0).click()
         cy.get('#vagaInput').clear().blur()
         cy.get('.btn-primary').should('be.visible').and('not.be.enabled')
         cy.get(':nth-child(3) > .text-danger').should('be.visible').and('have.text', 'O campo Vaga Afirmativa não pode estar vazio!')
     })
 
     it('CT004 - Editando descriçao da vaga', () => {
-        cy.get(':nth-child(1) > .rounded-end > .edit').click()
+        cy.get('tr:not(:has(td:nth-child(2) label:contains("Inativo"))) > .rounded-end > .edit').eq(0).click()
         cy.get('#vagaInput').clear().type('Teste')
         cy.get('.btn-text').click()
         cy.get('.swal2-popup').should('be.visible')
@@ -52,14 +53,14 @@ describe('Suit Test Vagas Afirmativas - Pesquisar e Editar (US 61449)', () => {
     })
 
     it('CT005 - Editar Vaga (Nome repetido)', () => {
-        cy.get(':nth-child(1) > .rounded-end > .edit').click()
+        cy.get('tr:not(:has(td:nth-child(2) label:contains("Inativo"))) > .rounded-end > .edit').eq(0).click()
         cy.get('#vagaInput').clear().type('Teste')
         cy.get('.btn-primary').click()
         cy.get('span.text-danger').should('be.visible').and('have.text', '**Já existe um registro com essa descrição')
     })
 
     it('CT006 - Editar Vaga (Nome novo)', () => {
-        cy.get(':nth-child(1) > .rounded-end > .edit').click()
+        cy.get('tr:not(:has(td:nth-child(2) label:contains("Inativo"))) > .rounded-end > .edit').eq(0).click()
         cy.get('#vagaInput').clear().type(randomBytes(6).toString('hex'))
         cy.get('.btn-primary').click()
         cy.get('#swal2-title').should('be.visible').and('have.text', 'Sucesso')

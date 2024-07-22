@@ -5,11 +5,13 @@ describe('Suit Test Departamentos - Pesquisar', () => {
 
     beforeEach(() => {
         cy.authenticate()
+        cy.intercept('/departamento/search*').as('pesquisa')
+        cy.intercept('/usuario/multiselect-usuarios').as('select')
         cy.visit('/setup-da-empresa/departamentos', { failOnStatusCode: false })
         cy.url().should('contain', 'setup-da-empresa/departamentos')
     })
 
-    it('[Bug] CT001 - Pesquisar texto', () => {
+    it('CT001 - Pesquisar texto', () => {
         const searchButton = cy.get('button.primary')
         searchButton.should('be.visible').and('be.enabled').and('have.text', 'Pesquisar')
         const searchBox = cy.get('input[placeholder="Ex: Recursos Humanos"]')
@@ -58,14 +60,14 @@ describe('Suit Test Departamentos - Pesquisar', () => {
                 multiselect.should('be.visible').and('include.text', responsavelText)
                 cy.get('button.primary').click()
                 cy.wait('@pesquisa')
-                cy.wait(300)
+                cy.wait(1000)
                 cy.get('tbody tr').if().then(() => {
                     cy.get('td.description + td').each(name => {
                         expect(name.text().trim()).to.equal(responsavelText)
                     })
                 }).else().get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
-                cy.get('div.item-multiselect span.icon-multiselect').click()
-                multiselect.should('not.exist')
+                cy.get('header > :nth-child(2) > span').click()
+                cy.get('.item-multiselect').should('not.exist')
             }
         })
     })

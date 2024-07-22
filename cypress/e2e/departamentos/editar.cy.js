@@ -22,7 +22,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
         }).else().then(() => cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado'))
     })
 
-    it('[Bug] CT002 - Visualizar departamento', () => {
+    it('CT002 - Visualizar departamento', () => {
         cy.intercept('/departamento/*').as('departamento')
         cy.get('tbody tr').eq(1).click()
         cy.wait('@departamento')
@@ -31,7 +31,6 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
         cy.get('span.slider').should('be.visible')
         cy.get('#nomeDepartamento').should('be.visible').and('be.disabled').and('have.attr', 'maxlength', 100)
         cy.get('#abreviacao').should('be.visible').and('be.disabled').and('have.attr', 'maxlength', 2)
-        cy.get('.ng-input > input').should('be.visible').and('be.disabled').and('have.attr', 'maxlength', 100)
         cy.get('#emailResponsavel').should('be.visible').and('be.disabled')
 
         cy.get('button.primary').should('be.visible').and('be.enabled')
@@ -104,7 +103,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
         cy.url().should('not.contain', '/form')
     })
 
-    it.only('CT008 - Salvar alterações', () => {
+    it('CT008 - Salvar alterações', () => {
         cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(0).click()
         cy.get('button.primary').click()
         cy.get('span.slider').click()

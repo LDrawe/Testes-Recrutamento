@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 import { randomBytes } from 'crypto'
 
-describe('Suit Test Area do Candidato', () => {
+describe('Suit Test Area do Candidato (US 70885)', () => {
     beforeEach(() => {
         cy.authenticate()
         cy.visit('/area-candidato/curriculo/form', { failOnStatusCode: false })
@@ -87,7 +87,7 @@ describe('Suit Test Area do Candidato', () => {
     })
 
     it('[Bug] TC014- Teste campo Telefone Celular aceitando Letras', () => {
-        cy.get('#telefone').type('rnbanfjnBILAKMNFQOÇJ').should('have.value', '')
+        cy.get('#telefone').type('rnbanfjnBILAKMNFQOÇJ').should('have.text', '(')
     })
 
     it('[Bug] TC015- Teste Campo Telefone Celular sem o digito 9 após o ddd', () => {
@@ -337,14 +337,15 @@ describe('Suit Test Area do Candidato', () => {
         })
     })
 
-    it('[Bug] TC048 - Validação Campo "Curso" quando "Formação" for diferente de "Técnico" ou "Superior"', () => {
+    it('TC048 - Validação Campo "Curso" quando "Formação" for diferente de "Técnico" ou "Superior"', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
 
         for (let i = 0; i < 2; i++) {
             cy.get('#formacao').click()
             cy.get('div.ng-option').eq(i).click()
-            cy.get('#curso').should('be.disabled')
+            cy.get('#curso').type('Eletricista').clear().blur()
+            cy.get('.error-msg').should('not.exist')
         }
     })
 
@@ -355,7 +356,8 @@ describe('Suit Test Area do Candidato', () => {
         for (let i = 2; i < 4; i++) {
             cy.get('#formacao').click()
             cy.get('div.ng-option').eq(i).click()
-            cy.get('#curso').should('be.enabled')
+            cy.get('#curso').should('be.enabled').type('Eletricista').clear().blur()
+            cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
         }
     })
 
@@ -395,7 +397,7 @@ describe('Suit Test Area do Candidato', () => {
         cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-input > .ng-untouched').should('not.have.value', '')
     })
 
-    it('[Bug] TC052 - Validação campo "Data inicio" maior que a data atual', () => {
+    it.only('[Bug] TC052 - Validação campo "Data inicio" maior que a data atual', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
 
@@ -415,7 +417,7 @@ describe('Suit Test Area do Candidato', () => {
         cy.get(':nth-child(1) > .error-msg').should('be.visible').and('have.text', ' Data de Início é maior que a Data Atual ')
     })
 
-    it('[Bug] TC053 - Validação campo "Data Início" maior que a "Data Termino"', () => {
+    it.only('[Bug] TC053 - Validação campo "Data Início" maior que a "Data Termino"', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
 

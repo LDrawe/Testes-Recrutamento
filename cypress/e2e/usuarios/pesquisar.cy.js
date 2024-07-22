@@ -92,7 +92,7 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
         });
     })
 
-    it('CT010- Teste Pesquisar ', () => {
+    it('[Bug] CT010- Teste Pesquisar ', () => {
         cy.intercept('GET', '/cargo/multiselect-cargos').as('fetchCargo')
         cy.intercept('GET', '/departamento/multiselect-departamentos').as('fetchDepartamento')
         cy.wait(['@fetchCargo', '@fetchDepartamento'])
@@ -116,7 +116,7 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
                             cy.wrap(name).should('have.text', optionText)
                         })
                     }).else().get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
-                    cy.get('div.item-multiselect span').click()
+                    cy.get('header > div > span').click()
                 }
             })
         })
