@@ -119,7 +119,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.get('.error-msg').should('be.visible').and('have.text', ' CPF inválido ')
     })
 
-    it.only('TC015 - Validação Área de Trabalho máximo de caracteres', () => {
+    it('TC015 - Validação Área de Trabalho máximo de caracteres', () => {
         cy.get('#areaTrabalho').type(randomBytes(60).toString('hex')).blur()
             .invoke('val').then(val => cy.wrap(val).should('have.length.at.most', 100))
     })

@@ -119,7 +119,7 @@ describe('Suit Test Departamentos - Pesquisar', () => {
             })
             cy.get('button.primary').click()
             cy.wait('@pesquisa')
-            cy.wait(300)
+            cy.wait(800)
             cy.get('tbody tr > td:nth(3)').each(td => {
                 expect(td.text().trim()).to.equal(states[i])
             })

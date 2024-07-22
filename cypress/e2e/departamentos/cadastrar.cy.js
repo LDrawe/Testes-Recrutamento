@@ -32,7 +32,7 @@ describe('Suit Test Departamentos - Cadastrar (US 60625)', () => {
         cy.get('input#abreviacao').clear().type('IG')
         cy.get('button.primary').click()
         cy.get('#swal2-title').should('be.visible').and('have.text', 'Erro na requisição')
-        cy.get('div#swal2-html-container').should('be.visible').and('have.text', 'Já existe um registro com essa descrição.')
+        cy.get('div#swal2-html-container').should('be.visible').and('have.text', 'Já existe um registro cadastrado com essa descrição.')
         cy.get('button.swal2-confirm').click()
         cy.get('div.modal-content').should('not.exist')
     })

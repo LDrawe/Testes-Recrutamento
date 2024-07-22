@@ -7,7 +7,7 @@ module.exports = defineConfig({
     PASSWORD: process.env.PASSWORD
   },
   e2e: {
-    baseUrl: 'https://app.dev.recrutamento.itixti-lab.com.br/',
+    baseUrl: process.env.URL,
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },

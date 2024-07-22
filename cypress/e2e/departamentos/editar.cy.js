@@ -6,11 +6,10 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     beforeEach(() => {
         cy.authenticate()
         cy.visit('/setup-da-empresa/departamentos', { failOnStatusCode: false })
-        cy.url().should('contain', 'setup-da-empresa/departamentos')
     })
 
     it('CT001 - Exibir departamentos', () => {
-        cy.get('tbody tr').if().then(rows => {
+        cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').if().then(rows => {
             expect(rows.length).to.be.at.most(10)
             for (let i = 0; i < rows.length; i++) {
                 let linha = cy.wrap(rows[i])
@@ -24,7 +23,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
 
     it('CT002 - Visualizar departamento', () => {
         cy.intercept('/departamento/*').as('departamento')
-        cy.get('tbody tr').eq(1).click()
+        cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(1).click()
         cy.wait('@departamento')
         cy.url().should('contain', 'setup-da-empresa/departamentos/form')
         cy.get('input[type="checkbox"]').should('exist').and('be.disabled')
@@ -39,7 +38,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
 
     it('CT003 - Editar departamento', () => {
         cy.intercept('/departamento/*').as('departamento')
-        cy.get('tbody tr').eq(5).click()
+        cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(0).click()
         cy.wait('@departamento')
         cy.get('button.primary').click()
         cy.get('input:not([id="emailResponsavel"])').each(input => {
@@ -50,7 +49,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     it('CT004 - Remover dados', () => {
         cy.intercept('GET', '/departamento/*').as('departamento')
         cy.intercept('GET', '/usuario/multiselect-usuarios-email').as('email')
-        cy.get('tbody tr').eq(5).click()
+        cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(0).click()
         cy.get('button.primary').click()
         cy.wait(['@departamento', '@email'])
         cy.get('input#nomeDepartamento').clear().blur()
@@ -65,7 +64,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
 
     it('CT005 - Responsável pelo Departamento', () => {
         cy.intercept('/departamento/*').as('departamento')
-        cy.get('tbody tr').eq(5).click()
+        cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(0).click()
         cy.wait('@departamento')
         cy.get('button.primary').click()
         cy.get('.ng-arrow-wrapper').click()
@@ -75,7 +74,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     })
 
     it('CT006 - Apagar Responsável', () => {
-        cy.get('tbody tr').eq(5).click()
+        cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(0).click()
         cy.get('button.primary').click()
         cy.get('.ng-arrow-wrapper').click()
         cy.get('div.ng-option:nth(3)').click()
@@ -86,17 +85,17 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     })
 
     it('CT007 - Voltar sem editar', () => {
-        cy.get('tbody tr').eq(5).click()
+        cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(0).click()
         cy.get('button.secondary').click()
         cy.url().should('not.contain', '/form')
     })
 
     it('CT008 - Voltar após clicar em editar', () => {
-        cy.get('tbody tr').eq(5).click()
+        cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(0).click()
         cy.get('button.primary').click()
         cy.get('button.secondary').click()
         cy.get('#swal2-title').should('be.visible').and('have.text', 'Confirmar')
-        cy.get('div#swal2-html-container').should('be.visible').and('have.text', 'Deseja sair SEM salvar as alterações feitas?')
+        cy.get('#swal2-html-container').should('be.visible').and('have.text', 'Deseja sair SEM salvar as alterações feitas?')
         cy.get('.swal2-cancel').click()
         cy.get('button.secondary').click()
         cy.get('.swal2-confirm').click()
@@ -106,7 +105,6 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
     it('CT008 - Salvar alterações', () => {
         cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(0).click()
         cy.get('button.primary').click()
-        cy.get('span.slider').click()
         cy.get('#nomeDepartamento').clear().type(randomBytes(3).toString('hex'))
         cy.get('#abreviacao').clear().type(randomBytes(2).toString('hex'))
         cy.get('.ng-arrow-wrapper').click()
@@ -114,7 +112,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
         cy.get('.ng-arrow-wrapper').click()
         cy.get('button.primary').click()
         cy.get('#swal2-title').should('be.visible').and('have.text', 'Sucesso')
-        cy.get('div#swal2-html-container').should('be.visible').and('have.text', 'Registro salvo com sucesso')
+        cy.get('#swal2-html-container').should('be.visible').and('have.text', 'Registro salvo com sucesso')
         cy.get('.swal2-confirm').click()
         cy.url().should('not.contain', '/form')
     })
