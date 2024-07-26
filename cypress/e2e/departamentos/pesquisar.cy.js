@@ -15,29 +15,26 @@ describe('Suit Test Departamentos - Pesquisar', () => {
         const searchButton = cy.get('button.primary')
         searchButton.should('be.visible').and('be.enabled').and('have.text', 'Pesquisar')
         const searchBox = cy.get('input[placeholder="Ex: Recursos Humanos"]')
-        const searchInput = 'Itix Gaming'
+        const searchInput = 'Financeiro'
         searchBox.should('be.visible').and('be.enabled').and('have.attr', 'maxlength', 100)
         searchBox.clear().type(searchInput)
         searchBox.should('have.value', searchInput)
         searchButton.click()
 
         cy.wait('@pesquisa')
-        cy.get('tbody tr').then(rows => {
-            if (rows.length === 0) {
-                cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
-            } else {
-                const rowTexts = []
-                rows.find('td.description').each((i, td) => {
-                    rowTexts.push(td.textContent.trim())
-                })
-                let flag = false
-                for (const text of rowTexts) {
-                    if (!text.toLowerCase().includes(searchInput.toLowerCase())) continue
-                    flag = true
-                }
-                expect(flag).to.be.true
+        cy.wait(800)
+        cy.get('tbody tr').if().then(rows => {
+            const rowTexts = []
+            rows.find('td.description').each((i, td) => {
+                rowTexts.push(td.textContent.trim())
+            })
+            let flag = false
+            for (const text of rowTexts) {
+                if (!text.toLowerCase().includes(searchInput.toLowerCase())) continue
+                flag = true
             }
-        })
+            expect(flag).to.be.true
+        }).else().then(() => cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado'))
     })
 
     it('CT002 - Filtrar por responsável', () => {

@@ -92,7 +92,7 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
         });
     })
 
-    it('[Bug] CT010- Teste Pesquisar ', () => {
+    it('CT010- Teste Pesquisar ', () => {
         cy.intercept('GET', '/cargo/multiselect-cargos').as('fetchCargo')
         cy.intercept('GET', '/departamento/multiselect-departamentos').as('fetchDepartamento')
         cy.wait(['@fetchCargo', '@fetchDepartamento'])

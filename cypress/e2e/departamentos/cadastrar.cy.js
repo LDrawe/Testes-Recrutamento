@@ -28,8 +28,8 @@ describe('Suit Test Departamentos - Cadastrar (US 60625)', () => {
 
     it('CT003 - Cadastrar com nome repetido', () => {
         cy.get('button.secondary').click()
-        cy.get('input#nomeDepartamento').clear().type('ITIX GAMING')
-        cy.get('input#abreviacao').clear().type('IG')
+        cy.get('input#nomeDepartamento').clear().type('Financeiro')
+        cy.get('input#abreviacao').clear().type('FI')
         cy.get('button.primary').click()
         cy.get('#swal2-title').should('be.visible').and('have.text', 'Erro na requisição')
         cy.get('div#swal2-html-container').should('be.visible').and('have.text', 'Já existe um registro cadastrado com essa descrição.')
@@ -40,7 +40,7 @@ describe('Suit Test Departamentos - Cadastrar (US 60625)', () => {
     it('CT004 - Cadastrar com Abreviação repetida', () => {
         cy.get('button.secondary').click()
         cy.get('input#nomeDepartamento').clear().type(randomBytes(3).toString('hex'))
-        cy.get('input#abreviacao').clear().type('IG')
+        cy.get('input#abreviacao').clear().type('IN')
         cy.get('button.primary').click()
         cy.get('#swal2-title').should('be.visible').and('have.text', 'Erro na requisição')
         cy.get('div#swal2-html-container').should('be.visible').and('have.text', 'Já existe um Departamento cadastrado com essa abreviação.')

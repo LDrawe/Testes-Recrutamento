@@ -64,7 +64,6 @@ Cypress.Commands.add('fillCurriculumForm', (continuar = true, cep = '69103492') 
     if (continuar) {
         cy.get('#cep').type(cep)
         cy.wait('@cep')
-        cy.get('#numero').type('1')
         cy.get('#complemento').type('Apt 42')
         cy.get('#referencia').type('Subindo o morro')
     }
