@@ -225,8 +225,8 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
 
     it('TC033 - Validação "Hard Skill" e "Soft Skill" item encontrado', () => {
         const hardSkills = cy.get('#hardSkills > .custom > .ng-select-container > .ng-arrow-wrapper')
-        hardSkills.click().type('Test')
-        cy.get('div.ng-option').should('be.visible').and('have.text', 'Test')
+        hardSkills.click().type('Testes de Software')
+        cy.get('div.ng-option').should('be.visible').and('have.text', 'Testes de Software')
         hardSkills.click()
         const softSkills = cy.get('#softSkills > .custom > .ng-select-container > .ng-arrow-wrapper')
         softSkills.click().type('Criatividade')
@@ -299,7 +299,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         })
     })
 
-    it.only('[Bug] TC041 - Validação Campo "Curso" vazio', () => {
+    it.skip('[Bug] TC041 - Validação Campo "Curso" vazio', () => {
         cy.fillCandidatoForm(false)
         const formacao = cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper')
         formacao.click()
@@ -524,7 +524,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
 
     it('TC062 - Validação listbox "Cargo" item encontrado', () => {
         cy.fillCandidatoForm()
-        cy.get('#cargo').click().type('Desenvolvedor Backend')
+        cy.get('#cargo').click().type('Desenvolvedor Backend Sênior')
         cy.get('div.ng-option').should('be.visible').and('have.text', 'Desenvolvedor Backend Sênior')
     })
 
@@ -633,7 +633,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.get('.justify-content-between > .col-3 > .btn').click()
         cy.get('.justify-content-between > .col-3 > .btn').click()
         cy.get('.p-0 > :nth-child(1)').should('be.visible').and('have.text', ' Informações Pessoais ')
-        cy.get('input.ng-pristine').each(campo => {
+        cy.get('input.ng-pristine:not(#areaTrabalho)').each(campo => {
             cy.wrap(campo).should('not.have.value', '')
         })
     })

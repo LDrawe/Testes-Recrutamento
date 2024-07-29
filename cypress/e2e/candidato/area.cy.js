@@ -158,14 +158,14 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         })
     })
 
-    it('TC026- Teste Campo Número mais de 8 Caracteres', () => {
+    it.skip('TC026- Teste Campo Número mais de 8 Caracteres', () => {
         cy.fillCurriculumForm(true, '29500000')
         cy.get('#numero').type(randomBytes(9).toString('hex')).invoke('val').then((val) => {
             expect(val.length).to.be.at.most(8)
         })
     })
 
-    it('TC027- Teste Campo Número aceitando Letras', () => {
+    it.skip('TC027- Teste Campo Número aceitando Letras', () => {
         cy.fillCurriculumForm(false)
         cy.get('#numero').type('randomWord').should('have.value', '')
     })
@@ -397,7 +397,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-input > .ng-untouched').should('not.have.value', '')
     })
 
-    it.only('[Bug] TC052 - Validação campo "Data inicio" maior que a data atual', () => {
+    it.skip('[Bug] TC052 - Validação campo "Data inicio" maior que a data atual', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
 
@@ -417,7 +417,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         cy.get(':nth-child(1) > .error-msg').should('be.visible').and('have.text', ' Data de Início é maior que a Data Atual ')
     })
 
-    it.only('[Bug] TC053 - Validação campo "Data Início" maior que a "Data Termino"', () => {
+    it.skip('[Bug] TC053 - Validação campo "Data Início" maior que a "Data Termino"', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
 

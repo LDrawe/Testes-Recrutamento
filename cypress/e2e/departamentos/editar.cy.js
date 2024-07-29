@@ -102,7 +102,7 @@ describe('Suit Test Departamentos - Visualizar e Editar (US 67054)', () => {
         cy.url().should('not.contain', '/form')
     })
 
-    it('CT008 - Salvar alterações', () => {
+    it('CT009 - Salvar alterações', () => {
         cy.get('tbody tr:not(:has(td:nth-child(4) label:contains("Inativo")))').eq(0).click()
         cy.get('button.primary').click()
         cy.get('#nomeDepartamento').clear().type(randomBytes(3).toString('hex'))
