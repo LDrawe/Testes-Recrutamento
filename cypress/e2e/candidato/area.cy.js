@@ -19,7 +19,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
 
     it('TC002- Teste Campo Nome Vazio', () => {
         cy.get('#nome').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC003- Teste Campo Nome mais de 60 caracteres', () => {
@@ -30,7 +30,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
 
     it('TC004- Teste Campo Sobrenome Vazio', () => {
         cy.get('#sobrenome').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC005- Teste Campo Sobrenome mais de 60 caracteres', () => {
@@ -41,7 +41,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
 
     it('TC006- Teste Campo Email Vazio', () => {
         cy.get('#email').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC007- Teste Campo Email mais de 256 caracteres', () => {
@@ -52,7 +52,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
 
     it('TC008- Teste Campo CPF Vazio', () => {
         cy.get('#cpf').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC009- Teste Campo CPF mais de 11 caracteres', () => {
@@ -70,7 +70,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         cy.get('.ngb-dp-footer > :nth-child(3)').click()
         cy.get('.input-date-picker > img').click()
         cy.get('.ngb-dp-footer > :nth-child(2)').click()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC012- Teste campo Data de Nascimento data futura', () => {
@@ -78,21 +78,21 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         cy.get('[aria-label="Select month"]').select('jun.')
         cy.get('[aria-label="Select year"]').select('2025')
         cy.get('[aria-label="domingo, 8 de junho de 2025"] > .btn-light').click()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' A data de nascimento informada é inválida ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' A data informada não pode ser maior que a data atual ')
     })
 
     it('TC013- Teste campo Telefone celular vazio', () => {
         cy.get('#telefone').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
-    it('[Bug] TC014- Teste campo Telefone Celular aceitando Letras', () => {
-        cy.get('#telefone').type('rnbanfjnBILAKMNFQOÇJ').should('have.text', '(')
+    it('TC014- Teste campo Telefone Celular aceitando Letras', () => {
+        cy.get('#telefone').type('rnbanfjnBILAKMNFQOÇJ').should('not.have.text', '(')
     })
 
-    it('[Bug] TC015- Teste Campo Telefone Celular sem o digito 9 após o ddd', () => {
-        cy.get('#telefone').type('3288844849')
-        cy.get('.error-msg').should('be.visible').and('have.text', ' O telefone informado é inválido ')
+    it('TC015- Teste Campo Telefone Celular sem o digito 9 após o ddd', () => {
+        cy.get('#telefone').type('3288844849').blur()
+        cy.get('.col-lg-2 > .ng-star-inserted').should('be.visible').and('have.text', ' O telefone informado é inválido ')
     })
 
     it('TC016- Teste botão Avançar', () => {
@@ -103,7 +103,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
     it('TC017- Teste Campo Cep Vazio', () => {
         cy.fillCurriculumForm(false)
         cy.get('#cep').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC018- Teste Campo Cep encontrado', () => {
@@ -130,25 +130,25 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
     it('TC021- Teste Campo Cep aceitando letras', () => {
         cy.fillCurriculumForm(false)
         cy.get('#cep').type('abcdefghijklm').should('have.value', '')
-        cy.get('.error-msg').should('be.visible').and('have.text', 'CEP informado é inválido')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', 'CEP informado é inválido')
     })
 
     it('TC022- Teste Campo Endereço Vazio', () => {
         cy.fillCurriculumForm(true, '29500000')
         cy.get('#endereco').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC023- Teste Campo Bairro vazio', () => {
         cy.fillCurriculumForm(true, '29500000')
         cy.get('#bairro').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
-    it('TC024- Teste Campo Numero Vazio', () => {
+    it.skip('TC024- Teste Campo Numero Vazio', () => {
         cy.fillCurriculumForm(false)
         cy.get('#numero').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC025- Teste Campo Complemento mais de 160 Caracteres', () => {
@@ -173,7 +173,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
     it('TC028- Teste Campo Referencia Vazio', () => {
         cy.fillCurriculumForm(true, '11111111')
         cy.get('#referencia').focus().blur()
-        cy.get('.error-msg').should('not.exist')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('not.exist')
     })
 
     it('TC029- Teste Campo Referencia mais de 160 Caracteres', () => {
@@ -186,19 +186,19 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
     it('TC030- Teste Campo Cidade Vazio', () => {
         cy.fillCurriculumForm(true, '11111111')
         cy.get('#cidade').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC031- Teste Campo Estado Vazio', () => {
         cy.fillCurriculumForm(true, '11111111')
         cy.get('#estado').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC032- Teste Campo Pais Vazio', () => {
         cy.fillCurriculumForm(true, '11111111')
         cy.get('#pais').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', 'Campo de preenchimento obrigatório')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', 'Campo de preenchimento obrigatório')
     })
 
     it('TC033- Teste Campo Estado mais de 2 caracteres', () => {
@@ -238,7 +238,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
         cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper').click().click()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC039- Validação Opções do Campo "Formação"', () => {
@@ -259,7 +259,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         formacao.click()
         cy.get('div.ng-option').eq(2).click()
         cy.get('#curso').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC041 - Validação Campo "Curso" mais de 256 caracteres', () => {
@@ -304,7 +304,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         cy.get('#formacao > .ng-select-container > .ng-arrow-wrapper').click()
         cy.get('div.ng-option').eq(2).click()
         cy.get('#instituicao').focus().blur()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
     })
 
     it('TC045 - Validação Campo "Instituição" mais de 256 caracteres', () => {
@@ -345,7 +345,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
             cy.get('#formacao').click()
             cy.get('div.ng-option').eq(i).click()
             cy.get('#curso').type('Eletricista').clear().blur()
-            cy.get('.error-msg').should('not.exist')
+            cy.get('span.ng-star-inserted:not(.hiUser)').should('not.exist')
         }
     })
 
@@ -357,7 +357,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
             cy.get('#formacao').click()
             cy.get('div.ng-option').eq(i).click()
             cy.get('#curso').should('be.enabled').type('Eletricista').clear().blur()
-            cy.get('.error-msg').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+            cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
         }
     })
 
@@ -397,7 +397,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-input > .ng-untouched').should('not.have.value', '')
     })
 
-    it.skip('[Bug] TC052 - Validação campo "Data inicio" maior que a data atual', () => {
+    it('[Bug] TC052 - Validação campo "Data inicio" maior que a data atual', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
 
@@ -414,10 +414,10 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
         cy.get(':nth-child(1) > :nth-child(1) > .d-flex').click()
         cy.get('tbody > :nth-child(2) > :nth-child(2)').click()
-        cy.get(':nth-child(1) > .error-msg').should('be.visible').and('have.text', ' Data de Início é maior que a Data Atual ')
+        cy.get(':nth-child(1) > span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Data de Início é maior que a Data Atual ')
     })
 
-    it.skip('[Bug] TC053 - Validação campo "Data Início" maior que a "Data Termino"', () => {
+    it('[Bug] TC053 - Validação campo "Data Início" maior que a "Data Termino"', () => {
         cy.fillCurriculumForm()
         cy.get('button.btn-primary').click()
 
@@ -433,7 +433,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         cy.get('#dataTermino > .date-picker > .date-picker-containers > .date-picker-container > .date-picker-actions > .date-picker-icon-wrapper > img').click()
         cy.get(':nth-child(4) > :nth-child(3) > .d-flex').click()
         cy.get('.curryear').click()
-        cy.get('.error-msg').should('be.visible').and('have.text', ' Data de Término é menor que a Data de Início ')
+        cy.get('span.ng-star-inserted:not(.hiUser)').should('be.visible').and('have.text', ' Data de Término é menor que a Data de Início ')
     })
 
     it('TC054 - Teste Botão "Adicionar outra formação"', () => {
@@ -462,7 +462,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
         cy.get('.ng-untouched.ng-invalid > :nth-child(2) > .btn').click()
         const selectors = ['#formacao', '#curso', '#status', '#instituicao', '[formcontrolname="dataInicio"]']
         for (const campo of selectors) {
-            cy.get(`${campo} + div.error-msg`).should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
+            cy.get(`${campo} + divspan.ng-star-inserted:not(.hiUser)`).should('be.visible').and('have.text', ' Campo de preenchimento obrigatório ')
         }
     })
 

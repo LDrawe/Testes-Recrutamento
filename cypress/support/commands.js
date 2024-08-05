@@ -59,7 +59,7 @@ Cypress.Commands.add('fillCurriculumForm', (continuar = true, cep = '69103492') 
     cy.get('.ngb-dp-footer > :nth-child(3)').click()
     cy.get('#telefone').type('32958475687')
     cy.get('#cpf').type('66654451007')
-    cy.get('.btn').click()
+    cy.get('.ng-star-inserted > .btn').click()
 
     if (continuar) {
         cy.get('#cep').type(cep)
