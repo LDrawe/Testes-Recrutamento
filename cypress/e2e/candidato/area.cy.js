@@ -5,7 +5,7 @@ describe('Suit Test Area do Candidato (US 70885)', () => {
     beforeEach(() => {
         cy.authenticate()
         cy.visit('/area-candidato/curriculo/form', { failOnStatusCode: false })
-        cy.intercept('GET', '/cidade-estado/consulta-cep/*').as('cep')
+        cy.intercept('/cidade-estado/consulta-cep/*').as('cep')
     })
 
     it('TC001- Teste Página Currículo do Candidato', () => {

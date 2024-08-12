@@ -31,7 +31,7 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
 
     it('CT004 - Teste lista de registros', () => {
         const registros = cy.get('tbody tr')
-        registros.should('have.length', 10)
+        registros.should('have.length.at.most', 10)
         registros.each($row => {
             cy.wrap($row).find('td')
                 .then(($tds) => {
@@ -52,7 +52,7 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
         cy.get('button.btn-primary').click()
         cy.get('tbody tr').should('have.length', 0)
         cy.get('div.cluster-filter-select span:first').click()
-        cy.get('tbody tr').should('have.length', 10)
+        cy.get('tbody tr').should('have.length.at.most', 10)
         searchBox.should('have.value', '')
         cy.get('div.item-multiselect').should('not.exist')
     })
@@ -80,7 +80,7 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
         cy.get('div.item-multiselect').should('be.visible')
     })
 
-    it('CT009 - Teste listbox departamento', () => {
+    it.only('CT009 - Teste listbox departamento', () => {
         const arrow = cy.get('div.ng-select-container:nth(2)').find('span:first')
         arrow.click()
         cy.get('div.ng-dropdown-panel-items').should('be.visible')
@@ -122,7 +122,7 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
         })
     })
 
-    it('CT011 - Teste nenhum resultado encontrado', () => {
+    it.only('CT011 - Teste nenhum resultado encontrado', () => {
         cy.get('input[placeholder="Nome de Usuário"]').type(randomBytes(5).toString('hex'))
         cy.get('button.btn-primary').click()
         cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')

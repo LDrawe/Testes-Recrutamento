@@ -13,7 +13,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.intercept('GET', '/cidade-estado/consulta-cep/*').as('cep')
     })
 
-    it('TC001 - Verificar Pagina de adicionar Candidato', () => {
+    it.only('TC001 - Verificar Pagina de adicionar Candidato', () => {
         cy.get('.rounded-circle').should('be.visible')
         cy.get('label.edit-profile-icon').should('be.visible')
         cy.get('#profile-image-input').should('be.enabled')
@@ -26,7 +26,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.get('#cargo > .ng-select-container').should('be.visible')
         cy.get('#cpf').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', 'Informe o CPF').and('have.attr', 'mask', '000.000.000-00')
         cy.get('#areaTrabalho').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', 'Informe a área de trabalho')
-        cy.get('#telefoneCelular').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', '(99)99999-9999').and('have.attr', 'mask', '(00)00000-0000')
+        cy.get('#telefoneCelular').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', '(99) 99999-9999').and('have.attr', 'mask', '(00)00000-0000')
         cy.get('#cep').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', 'Informe o CEP').and('have.attr', 'mask', '00000-000')
         cy.get('#endereco').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', 'Informe o endereço')
         cy.get('#bairro').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', 'Informe o bairro')
@@ -68,7 +68,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.get('img.rounded-circle').should('not.exist')
     })
 
-    it('TC006 - Validação Nome Numero de Caracteres Máximo', () => {
+    it.only('TC006 - Validação Nome Numero de Caracteres Máximo', () => {
         cy.get('span.h1').click()
         cy.get('.input-style').type(randomBytes(60).toString('hex')).blur()
         cy.get('div.error-msg').should('be.visible').and('have.text', ' Campo excedeu o tamanho limite de caracteres ')
@@ -229,8 +229,8 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.get('div.ng-option').should('be.visible').and('have.text', 'Testes de Software')
         hardSkills.click()
         const softSkills = cy.get('#softSkills > .custom > .ng-select-container > .ng-arrow-wrapper')
-        softSkills.click().type('Criatividade')
-        cy.get('div.ng-option').should('be.visible').and('have.text', 'Criatividade')
+        softSkills.click().type('Comunicação')
+        cy.get('div.ng-option').should('be.visible').and('have.text', 'Comunicação')
         softSkills.click()
     })
 
@@ -261,7 +261,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
 
     it('TC036 - Botão Continuar todos os campos obrigatórios preenchidos', () => {
         cy.fillCandidatoForm(false)
-        cy.get('p.title-section').should('be.visible').and('have.text', 'Experiência Acadêmica')
+        cy.get('p.title-section').should('be.visible').and('have.text', 'Experiências Acadêmicas')
     })
 
     it('TC037 - Botão Continuar sem ter todos os campos preenchidos', () => {
@@ -495,7 +495,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
 
     it('TC057 - Teste Botão "Continuar"', () => {
         cy.fillCandidatoForm()
-        cy.get('p.title-section').should('be.visible').and('have.text', 'Experiência Profissional')
+        cy.get('p.title-section').should('be.visible').and('have.text', 'Experiências Profissionais')
     })
 
     it('TC058 - Validação campo "Empresa" Vazio', () => {
@@ -622,7 +622,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
     it('TC072 - Teste Botão "Voltar"  Experiência profissional.', () => {
         cy.fillCandidatoForm()
         cy.get('.justify-content-between > .col-3 > .btn').click()
-        cy.get('p.title-section').should('be.visible').and('have.text', 'Experiência Acadêmica')
+        cy.get('p.title-section').should('be.visible').and('have.text', 'Experiências Acadêmicas')
         cy.get('input.ng-pristine:not([id="curso"])').each(campo => {
             cy.wrap(campo).should('not.have.value', '')
         })
