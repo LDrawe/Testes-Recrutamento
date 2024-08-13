@@ -13,20 +13,20 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.intercept('GET', '/cidade-estado/consulta-cep/*').as('cep')
     })
 
-    it.only('TC001 - Verificar Pagina de adicionar Candidato', () => {
+    it('TC001 - Verificar Pagina de adicionar Candidato', () => {
         cy.get('.rounded-circle').should('be.visible')
         cy.get('label.edit-profile-icon').should('be.visible')
         cy.get('#profile-image-input').should('be.enabled')
         cy.get('span.h1').should('be.visible').and('have.text', 'Clique para editar o nome').click()
         cy.get('.input-style').should('be.visible').and('be.enabled')
-        cy.get('span.h6').should('be.visible').and('have.text', 'Clique para editar o email').click()
+        cy.get('.h6').should('be.visible').and('have.text', 'Clique para editar o email').click().click()
         cy.get('.col-5 > .input-style').should('be.visible').and('be.enabled').and('have.attr', 'type', 'email')
         cy.get(':nth-child(3) > .btn').should('be.visible').and('be.enabled').and('include.text', 'Anexar Currículo')
         cy.get('.justify-content-between > .col-3 > .btn').should('be.visible').and('be.enabled').and('include.text', 'Voltar')
         cy.get('#cargo > .ng-select-container').should('be.visible')
         cy.get('#cpf').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', 'Informe o CPF').and('have.attr', 'mask', '000.000.000-00')
         cy.get('#areaTrabalho').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', 'Informe a área de trabalho')
-        cy.get('#telefoneCelular').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', '(99) 99999-9999').and('have.attr', 'mask', '(00)00000-0000')
+        cy.get('#telefoneCelular').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', '(99) 99999-9999').and('have.attr', 'mask', '(00) 00000-0000')
         cy.get('#cep').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', 'Informe o CEP').and('have.attr', 'mask', '00000-000')
         cy.get('#endereco').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', 'Informe o endereço')
         cy.get('#bairro').should('be.visible').and('be.enabled').and('have.attr', 'placeholder', 'Informe o bairro')
@@ -68,7 +68,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.get('img.rounded-circle').should('not.exist')
     })
 
-    it.only('TC006 - Validação Nome Numero de Caracteres Máximo', () => {
+    it('TC006 - Validação Nome Numero de Caracteres Máximo', () => {
         cy.get('span.h1').click()
         cy.get('.input-style').type(randomBytes(60).toString('hex')).blur()
         cy.get('div.error-msg').should('be.visible').and('have.text', ' Campo excedeu o tamanho limite de caracteres ')
