@@ -229,8 +229,8 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.get('div.ng-option').should('be.visible').and('have.text', 'Testes de Software')
         hardSkills.click()
         const softSkills = cy.get('#softSkills > .custom > .ng-select-container > .ng-arrow-wrapper')
-        softSkills.click().type('Comunicação')
-        cy.get('div.ng-option').should('be.visible').and('have.text', 'Comunicação')
+        softSkills.click().type('Organização')
+        cy.get('div.ng-option').should('be.visible').and('have.text', 'Organização')
         softSkills.click()
     })
 
