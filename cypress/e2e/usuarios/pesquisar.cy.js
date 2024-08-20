@@ -80,7 +80,7 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
         cy.get('div.item-multiselect').should('be.visible')
     })
 
-    it.only('CT009 - Teste listbox departamento', () => {
+    it('CT009 - Teste listbox departamento', () => {
         const arrow = cy.get('div.ng-select-container:nth(2)').find('span:first')
         arrow.click()
         cy.get('div.ng-dropdown-panel-items').should('be.visible')
@@ -122,7 +122,7 @@ describe('Suit Test Cadastro de Usuários - Pesquisar (US 70248)', () => {
         })
     })
 
-    it.only('CT011 - Teste nenhum resultado encontrado', () => {
+    it('CT011 - Teste nenhum resultado encontrado', () => {
         cy.get('input[placeholder="Nome de Usuário"]').type(randomBytes(5).toString('hex'))
         cy.get('button.btn-primary').click()
         cy.get('h5').should('be.visible').and('have.text', 'Nenhum resultado encontrado')
