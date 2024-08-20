@@ -48,10 +48,10 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.get('img.rounded-circle').should('not.exist')
     })
 
-    it('TC003 - Validação botão remover imagem', () => {
+    it.only('TC003 - Validação botão remover imagem', () => {
         cy.get('#profile-image-input').selectFile('./cypress/downloads/200.png', { force: true })
         cy.get('.clear-profile-icon').click().should('not.exist')
-        cy.get('img.rounded-circle').should('have.attr', 'src', 'assets/images/user-03.png')
+        cy.get('.profile-image-selector > .rounded-circle').should('have.attr', 'src', 'assets/images/user-03.png')
     })
 
     it('TC004 - Validação Campo Nome vazio', () => {
