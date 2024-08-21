@@ -48,7 +48,7 @@ describe('Suit Test Candidato - Cadastrar (US 66168)', () => {
         cy.get('img.rounded-circle').should('not.exist')
     })
 
-    it.only('TC003 - Validação botão remover imagem', () => {
+    it('TC003 - Validação botão remover imagem', () => {
         cy.get('#profile-image-input').selectFile('./cypress/downloads/200.png', { force: true })
         cy.get('.clear-profile-icon').click().should('not.exist')
         cy.get('.profile-image-selector > .rounded-circle').should('have.attr', 'src', 'assets/images/user-03.png')
